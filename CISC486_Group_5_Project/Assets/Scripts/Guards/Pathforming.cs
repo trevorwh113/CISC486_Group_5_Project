@@ -13,18 +13,6 @@ public class Pathforming : MonoBehaviour
         }
     }
 
-    // TODO: Remove this debug drawing of the path
-    Vector3 prev = new Vector3(0,0,0);
-
-    void FixedUpdate()
-    {
-        // TODO: Remove this debug drawing of the path
-        Vector3 target = getNextNodeInPath();
-        Debug.Log("Drawing line to: " + target);
-        Debug.DrawLine(prev, target, Color.red, 60);            
-        prev = target;
-    }
-
     public Vector3 getNextNodeInPath()
     {
         // The next node is the first in the queue
