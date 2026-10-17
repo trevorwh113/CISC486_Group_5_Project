@@ -67,6 +67,11 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
+    public Vector3 getProjectedPosition()
+    {
+        return transform.position + curMovement;
+    }
+
     private void applyMovement()
     {
         // Begin movement and apply the current movement

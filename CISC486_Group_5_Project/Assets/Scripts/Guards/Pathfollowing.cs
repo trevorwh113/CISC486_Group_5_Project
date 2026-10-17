@@ -1,4 +1,3 @@
-using System.Collections;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -15,7 +14,7 @@ public class Pathfollowing : MonoBehaviour
 
     /** The current seek target on the path */
     private PathNode currentTarget;
-    /** Indicates whether path followign is activated */
+    /** Indicates whether path following is activated */
     private bool isFollowingPath;
 
     void Start()
