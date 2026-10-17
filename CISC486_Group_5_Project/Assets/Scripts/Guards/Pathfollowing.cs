@@ -10,9 +10,9 @@ public class Pathfollowing : MonoBehaviour
     [Header("Navigation")]
     [Tooltip("The NavMeshAgent component of this game object.")]
     public NavMeshAgent navAgent;
-    [Tooltip("The Pathforming script of the path to follow. Should be attached to another object.")]
+    [Tooltip("The Pathforming object to use as a path. Should be attached to another object.")]
     public Pathforming path;
-    
+
     /** The current seek target on the path */
     private PathNode currentTarget;
     /** Indicates whether path followign is activated */
@@ -20,6 +20,9 @@ public class Pathfollowing : MonoBehaviour
 
     void Start()
     {
+        // Make sure to form the path before starting to use it
+        path.constructPath();
+
         // Start following the path at the closest node
         resumeFollowingPath();
     }

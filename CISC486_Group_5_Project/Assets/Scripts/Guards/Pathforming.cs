@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections.Generic;
+using System;
 
 /**
  * Implements a circular queue to represent a path comprised of nodes. 
@@ -10,22 +11,45 @@ public class Pathforming : MonoBehaviour
 {    
     /** A circular queue of nodes forming the path */
     private LinkedList<PathNode> nodes = new LinkedList<PathNode>();
-    
-    void Start()
+    /** Indicates whether the path has been read into the queue */
+    private bool isFormed = false;
+
+    /**
+     * Forms the path from all PathNodes nested under the current object.
+     * Must be called before any other Pathforming method! Skips if the 
+     * path has already been formed.
+     */
+    public void constructPath()
     {
-        // Forms the path from all PathNodes nested under the current object
-        PathNode[] nodesArray = GetComponentsInChildren<PathNode>();
-        foreach (PathNode node in nodesArray)
+        if (!isFormed)
         {
-            nodes.AddLast(node);
+            PathNode[] nodesArray = GetComponentsInChildren<PathNode>();
+            foreach (PathNode node in nodesArray)
+            {
+                nodes.AddLast(node);
+            }
+            isFormed = true;
         }
     }
 
     /** 
-     *Pops the next node in the queue and puts it at the end 
+     * Throws an error if the path has not been formed yet 
+     */
+    private void validatePath()
+    {
+        if (!isFormed)
+        {
+            throw new InvalidOperationException("Path has not yet been formed!");
+        }
+    }
+
+    /** 
+     * Pops the next node in the queue and puts it at the end 
      */
     public PathNode getNextNodeInPath()
     {
+        validatePath();
+
         // The next node is the first in the queue
         PathNode nextNode = nodes.First.Value;
 
@@ -42,6 +66,8 @@ public class Pathforming : MonoBehaviour
      */
     public PathNode getClosestNodeInPath(Vector3 position)
     {
+        validatePath();
+
         // Find the closest node by calculating distance to all nodes
         PathNode closestNode = nodes.First.Value;
         float closestDistance = Vector3.Distance(position, closestNode.getPosition());
