@@ -752,7 +752,7 @@ GameObject:
   - component: {fileID: 482200090}
   - component: {fileID: 482200089}
   - component: {fileID: 482200094}
-  - component: {fileID: 482200093}
+  - component: {fileID: 482200095}
   m_Layer: 0
   m_Name: Chasing_Guard
   m_TagString: Untagged
@@ -853,22 +853,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &482200093
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 482200088}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 185402492dc190640b0e809cc2b520e9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Chase
-  navAgent: {fileID: 482200094}
-  player: {fileID: 2101818828}
-  chaseRate: 2
-  stoppingDistance: 1
 --- !u!195 &482200094
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -891,6 +875,21 @@ NavMeshAgent:
   m_BaseOffset: 0.5
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
+--- !u!114 &482200095
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 482200088}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 27ad7334ddc977243b73741b3bf8ab2e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::VisionRange
+  visionRadius: 5
+  visionDistance: 11
+  player: {fileID: 2101818828}
 --- !u!1 &628430281
 GameObject:
   m_ObjectHideFlags: 0

@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 6097847858474040516}
   - component: {fileID: 3170440598832666071}
   - component: {fileID: 6995042099578187712}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Guard
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -82,7 +82,7 @@ GameObject:
   - component: {fileID: 257651597353396738}
   - component: {fileID: 6632932284145228844}
   - component: {fileID: 2188306717886683950}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Model
   m_TagString: Untagged
   m_Icon: {fileID: 0}

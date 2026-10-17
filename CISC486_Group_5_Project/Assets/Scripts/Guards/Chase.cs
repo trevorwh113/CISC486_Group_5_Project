@@ -1,6 +1,10 @@
 using UnityEngine;
 using UnityEngine.AI;
 
+/**
+ * Implements chase behaviour when attached to a guard agent.
+ * Must be enabled with start() and disabled with stopChase().
+ */
 public class Chase : MonoBehaviour
 {
     [Header("Navigation")]
@@ -34,7 +38,7 @@ public class Chase : MonoBehaviour
     /** 
      * Begin chase behaviour and double the agent's speed 
      */
-    public void beginChase()
+    public void startChase()
     {
         isChasing = true;
         walkSpeed = navAgent.speed;

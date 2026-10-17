@@ -67,6 +67,11 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
+    public Vector3 getCurrentPosition()
+    {
+        return transform.position;
+    }
+
     public Vector3 getProjectedPosition()
     {
         return transform.position + curMovement;
@@ -77,7 +82,6 @@ public class PlayerMovement : MonoBehaviour
         // Begin movement and apply the current movement
         phase = MovementPhase.Moving;
         Vector3 target = transform.position + curMovement;
-        // Debug.Log("Moving to:" + target);
         rigidbody.MovePosition(target);
     }
 
@@ -88,7 +92,6 @@ public class PlayerMovement : MonoBehaviour
         {
             phase = MovementPhase.Stopping;
             remStoppingDistance = stoppingDistance;
-            // Debug.Log("Begin Stopping at distance: " + remStoppingDistance);
         }
         
         // If we haven't reached the stop point, approach one step towards it
@@ -101,7 +104,6 @@ public class PlayerMovement : MonoBehaviour
 
             // Move in the direction of the previous movement, capped to the step size
             Vector3 target = transform.position + Vector3.ClampMagnitude(prevMovement, curStoppingDistance);
-            // Debug.Log("Stopping step: " + target);
             rigidbody.MovePosition(target);
 
             // Update the remaining distance to the stop point
@@ -112,7 +114,6 @@ public class PlayerMovement : MonoBehaviour
         else
         {
             phase = MovementPhase.Stopped;
-            // Debug.Log("Stopped at: " + transform.position);
         }
     }
 }

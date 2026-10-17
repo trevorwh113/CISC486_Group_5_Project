@@ -2,7 +2,9 @@ using UnityEngine;
 using UnityEngine.AI;
 
 /**
- * Steers the given agent along a given path.
+ * Steers the given agent along a given path. Can be enabled
+ * via startFollowingPath(), stopped with stopFollowingPath(),
+ * and resumed with resumeFollowingPath().
  */
 public class Pathfollowing : MonoBehaviour
 {
@@ -18,12 +20,9 @@ public class Pathfollowing : MonoBehaviour
     private bool isFollowingPath;
 
     void Start()
-    {
-        // Make sure to form the path before starting to use it
-        path.constructPath();
-
-        // Start following the path at the closest node
-        resumeFollowingPath();
+    {   
+        // TODO: Move this instruction to the guard controller
+        startFollowingPath();
     }
 
     void FixedUpdate()
@@ -57,6 +56,18 @@ public class Pathfollowing : MonoBehaviour
 
     /**
      * Begins path following behaviour by seeking to the nearest node in the path
+     */
+    public void startFollowingPath()
+    {
+        // Make sure to form the path before starting to use it
+        path.constructPath();
+
+        // Start following the path at the closest node
+        resumeFollowingPath();
+    }
+
+    /**
+     * Resumes path following behaviour by seeking to the nearest node in the path
      */
     public void resumeFollowingPath()
     {
