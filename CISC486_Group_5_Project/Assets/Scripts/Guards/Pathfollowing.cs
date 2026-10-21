@@ -17,13 +17,7 @@ public class Pathfollowing : MonoBehaviour
     /** The current seek target on the path */
     private PathNode currentTarget;
     /** Indicates whether path following is activated */
-    private bool isFollowingPath;
-
-    void Start()
-    {   
-        // TODO: Move this instruction to the guard controller
-        startFollowingPath();
-    }
+    private bool isFollowingPath = false;
 
     void FixedUpdate()
     {

@@ -10,7 +10,10 @@ GameObject:
   m_Component:
   - component: {fileID: 6097847858474040516}
   - component: {fileID: 3170440598832666071}
+  - component: {fileID: 77932935810482157}
   - component: {fileID: 6995042099578187712}
+  - component: {fileID: 5142635912970895493}
+  - component: {fileID: 9147758357187541034}
   m_Layer: 2
   m_Name: Guard
   m_TagString: Untagged
@@ -56,6 +59,22 @@ NavMeshAgent:
   m_BaseOffset: 0
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
+--- !u!114 &77932935810482157
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2389179221335417156}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fec7851c49c303847a6c89296d85c58c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::GuardController
+  chase: {fileID: 5142635912970895493}
+  patrol: {fileID: 6995042099578187712}
+  vision: {fileID: 9147758357187541034}
+  player: {fileID: 0}
 --- !u!114 &6995042099578187712
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -70,6 +89,37 @@ MonoBehaviour:
   m_EditorClassIdentifier: '::'
   navAgent: {fileID: 3170440598832666071}
   path: {fileID: 0}
+--- !u!114 &5142635912970895493
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2389179221335417156}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 185402492dc190640b0e809cc2b520e9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Chase
+  navAgent: {fileID: 3170440598832666071}
+  player: {fileID: 0}
+  chaseRate: 2
+  stoppingDistance: 1.5
+--- !u!114 &9147758357187541034
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2389179221335417156}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 27ad7334ddc977243b73741b3bf8ab2e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::VisionRange
+  visionRadius: 5
+  visionDistance: 10
+  player: {fileID: 0}
 --- !u!1 &4052333838248180122
 GameObject:
   m_ObjectHideFlags: 0

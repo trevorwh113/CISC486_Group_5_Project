@@ -92,6 +92,18 @@ public class VisionRange : MonoBehaviour
     {
         return isPlayerVisible;
     }
+    
+    /**
+     * A public getter for a weakened condition of whether the player is outside
+     * the circle formed by the vision distance. Useful to allow agents to "see"
+     * around corners, through obstacles, and behind themselves. 
+     */
+    public bool playerOutsideDistance()
+    {
+        float distance = Vector3.Distance(player.getCurrentPosition(), transform.position);
+        return distance > visionDistance;
+    }
+
 
     /**
      * Activates player detection. It is disabled until this method is called.
@@ -119,12 +131,4 @@ public class VisionRange : MonoBehaviour
         Debug.DrawLine(pointA, pointC, Color.red);
         Debug.DrawLine(pointB, pointC, Color.red);
     }
-
-    // TODO: Implement this behaviour in the guard controller
-    // When would you start chasing?
-        // When the player has been spotted (in range and line of sight)
-    // When would you stop chasing?
-        // Player is hiding (flag) OR
-        // Player is out of line of sight -> Won't keep chasing around corners
-        // Player is some distance away from the guard in any direction
 }
