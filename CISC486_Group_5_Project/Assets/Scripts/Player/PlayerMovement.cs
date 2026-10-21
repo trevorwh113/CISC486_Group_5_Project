@@ -41,6 +41,12 @@ public class PlayerMovement : MonoBehaviour
     /** The slowest arrival speed at which point decceleration stops */
     private float MIN_STOPPING_SPEED = 0.1f;
 
+    public void Start()
+    {
+        // Detect when the player has been caught by a guard
+        GameEvents.guardReachedPlayer.AddListener(playerCaught);
+    }
+
     public void OnMove(InputValue inputValue)
     {
         // Save the previous movement for reference when stopping
@@ -115,5 +121,14 @@ public class PlayerMovement : MonoBehaviour
         {
             phase = MovementPhase.Stopped;
         }
+    }
+
+    private void playerCaught()
+    {
+        // TODO: Decide what to actually do
+        // Currently, moving the player away. Probably it would actually 
+        // be warped back to a center position
+        // TODO: Maybe move this to a different script if appropriate (i.e. player controller, win/loseController)
+        rigidbody.MovePosition(transform.position + new Vector3(30,0,0));
     }
 }
