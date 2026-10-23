@@ -28,8 +28,19 @@ public class Sweeping : MonoBehaviour
     private Vector3 initialRotation;
 
     [Header("Detection State")]
-    [SerializeField]
-    private bool isPlayerDetected;
+    [SerializeField] private bool isPlayerDetected;
+
+    [Header("Flashlight")]
+    public Light flashlight;
+
+    [Header("Tracking")]
+    public float trackingSpeed = 120f;
+    public float loseTargetDelay = 1f;
+    public float returnToSweepSpeed = 180f;
+
+    private float lastSeenTime = float.NegativeInfinity;
+    private Vector3 lastKnownPlayerPosition;
+    private bool returningToSweep;
 
     void Start()
     {
@@ -54,18 +65,14 @@ public class Sweeping : MonoBehaviour
 
     void Update()
     {
-        // Original sweeping rotation - unchanged
-        float angle = Mathf.Sin(Time.time * sweepSpeed)
-                      * sweepAngle;
-
-        transform.localRotation = Quaternion.Euler(
-            initialRotation.x,
-            initialRotation.y + angle,
-            initialRotation.z
-        );
-
         // Detect player
         bool detected = CanSeePlayer();
+
+        if (detected)
+        {
+            lastSeenTime = Time.time;
+            lastKnownPlayerPosition = playerCollider.bounds.center;
+        }
 
         if (detected && !isPlayerDetected)
         {
@@ -78,6 +85,112 @@ public class Sweeping : MonoBehaviour
         }
 
         isPlayerDetected = detected;
+
+        if (isPlayerDetected ||
+            Time.time - lastSeenTime <= loseTargetDelay)
+        {
+            TrackPlayer(lastKnownPlayerPosition);
+            returningToSweep = true;
+        }
+        else
+        {
+            // Sweep while no player detected
+            SweepCamera();
+        }
+
+        if (flashlight != null)
+        {
+            flashlight.range = viewDistance;
+            flashlight.spotAngle = viewAngle;
+        }
+    }
+
+    void SweepCamera()
+    {
+        // Original sweeping calculation
+        float angle = Mathf.Sin(Time.time * sweepSpeed)
+                      * sweepAngle;
+
+        Quaternion targetRotation = Quaternion.Euler(
+            initialRotation.x,
+            initialRotation.y + angle,
+            initialRotation.z
+        );
+
+        // Smoothly return to the sweep after tracking
+        if (returningToSweep)
+        {
+            transform.localRotation =
+                Quaternion.RotateTowards(
+                    transform.localRotation,
+                    targetRotation,
+                    returnToSweepSpeed * Time.deltaTime
+                );
+
+            if (Quaternion.Angle(
+                transform.localRotation,
+                targetRotation) < 0.1f)
+            {
+                returningToSweep = false;
+            }
+        }
+        else
+        {
+            // Normal sweeping - unchanged
+            transform.localRotation = targetRotation;
+        }
+    }
+
+    void TrackPlayer(Vector3 targetPosition)
+    {
+        Vector3 direction =
+            targetPosition - transform.position;
+
+        // Convert direction into parent's local space
+        if (transform.parent != null)
+        {
+            direction =
+                transform.parent.InverseTransformDirection(
+                    direction
+                );
+        }
+
+        // Keep tracking horizontal (Y-axis rotation)
+        direction.y = 0f;
+
+        if (direction.sqrMagnitude < 0.001f)
+            return;
+
+        // Camera's original forward direction
+        Vector3 initialForward =
+            Quaternion.Euler(initialRotation)
+            * Vector3.forward;
+
+        initialForward.y = 0f;
+
+        if (initialForward.sqrMagnitude < 0.001f)
+            return;
+
+        // Find how far to rotate toward player
+        float targetAngle = Vector3.SignedAngle(
+            initialForward,
+            direction,
+            Vector3.up
+        );
+
+        Quaternion targetRotation = Quaternion.Euler(
+            initialRotation.x,
+            initialRotation.y + targetAngle,
+            initialRotation.z
+        );
+
+        // Smoothly rotate toward the player
+        transform.localRotation =
+            Quaternion.RotateTowards(
+                transform.localRotation,
+                targetRotation,
+                trackingSpeed * Time.deltaTime
+            );
     }
 
     bool CanSeePlayer()
