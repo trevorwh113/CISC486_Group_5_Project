@@ -37,6 +37,8 @@ public class GuardController : MonoBehaviour
      * behaviour can be perfomed at once.
      */
     private GuardMovementPhase phase;
+    /** Prevents guards from abandoning the chase after every server is scored */
+    private bool lockdownActive;
 
     void Start()
     {
@@ -44,6 +46,8 @@ public class GuardController : MonoBehaviour
         // TODO: Will cause issue if the player remaisn in the line of sight
         // TODO: Could cause issue if the player is caught before pathforming occurs
         GameEvents.guardReachedPlayer.AddListener(playerCaught);
+        // Begin permanent pursuit when the level objective is completed.
+        GameEvents.allServersScored.AddListener(activateLockdown);
 
         // The guard starts off by watching while patrolling
         phase = GuardMovementPhase.Patrolling;
@@ -58,9 +62,10 @@ public class GuardController : MonoBehaviour
         {
             startChasingAndStopWatching();
         }
-        // Stop chasing a player if they have left the vision distance
-        // TODO: When objects to hide exist, incorporate that into this decision making
-        if (phase == GuardMovementPhase.Chasing && vision.playerOutsideDistance())
+        // Normal chases end outside the vision distance; lockdown chases never end.
+        if (!lockdownActive &&
+            phase == GuardMovementPhase.Chasing &&
+            vision.playerOutsideDistance())
         {
             stopChasingAndResumePath();
         }
@@ -87,7 +92,27 @@ public class GuardController : MonoBehaviour
 
     private void playerCaught()
     {
+        // During lockdown, catching the player does not end permanent pursuit.
+        if (lockdownActive)
+        {
+            return;
+        }
+
         Debug.Log("Player has been caught! Stop chasing.");
         stopChasingAndResumePath();
+    }
+
+    /**
+     * Stops patrol behavior and permanently gives this guard the player's location.
+     */
+    private void activateLockdown()
+    {
+        lockdownActive = true;
+        chase.enableLockdownTracking();
+
+        if (phase != GuardMovementPhase.Chasing)
+        {
+            startChasingAndStopWatching();
+        }
     }
 }

@@ -8,4 +8,8 @@ using UnityEngine.Events;
 public static class GameEvents
 {
     public static UnityEvent guardReachedPlayer = new UnityEvent();
+    /** Signals that every server in the current level has been scored */
+    public static UnityEvent allServersScored = new UnityEvent();
+    /** Signals that the player reached the active exit and won the level */
+    public static UnityEvent playerWon = new UnityEvent();
 }

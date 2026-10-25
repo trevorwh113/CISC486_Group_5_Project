@@ -27,7 +27,8 @@ public class VisionRange : MonoBehaviour
     {
         if (watchingForPlayer)
         {
-            isPlayerVisible = isPlayerInRange() && isPlayerInLineOfSight();
+            // Hidden players cannot be detected, even when inside the vision range.
+            isPlayerVisible = !player.IsHidden && isPlayerInRange() && isPlayerInLineOfSight();
         }
     }
 
@@ -90,7 +91,7 @@ public class VisionRange : MonoBehaviour
      */
     public bool playerSpotted()
     {
-        return isPlayerVisible;
+        return !player.IsHidden && isPlayerVisible;
     }
     
     /**
@@ -100,6 +101,12 @@ public class VisionRange : MonoBehaviour
      */
     public bool playerOutsideDistance()
     {
+        // Treat hiding as leaving the chase range so guards stop pursuing the player.
+        if (player.IsHidden)
+        {
+            return true;
+        }
+
         float distance = Vector3.Distance(player.getCurrentPosition(), transform.position);
         return distance > visionDistance;
     }

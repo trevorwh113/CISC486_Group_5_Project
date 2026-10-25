@@ -30,6 +30,10 @@ public class PlayerMovement : MonoBehaviour
     [Tooltip("The distance the player moves after releasing input. The greater the value, the further they slide (range: 0+).")]
     public float stoppingDistance;
 
+    [Header("Hiding")]
+    [Tooltip("The child object containing the player's model and collider.")]
+    [SerializeField] private GameObject playerModel;
+
     /** The latest movement vector calculated from input */
     private Vector3 curMovement = new Vector3(0,0,0);
     /** The previous movement vector calculated from input */
@@ -40,6 +44,13 @@ public class PlayerMovement : MonoBehaviour
     private float remStoppingDistance = 0;
     /** The slowest arrival speed at which point decceleration stops */
     private float MIN_STOPPING_SPEED = 0.1f;
+    /** Whether the player is currently inside a hiding spot */
+    private bool isHidden;
+    /** The position where the player will reappear after leaving a hiding spot */
+    private Vector3 hidingExitPosition;
+
+    /** Allows other systems, such as guards, to check whether the player is hidden */
+    public bool IsHidden => isHidden;
 
     public void Start()
     {
@@ -49,11 +60,23 @@ public class PlayerMovement : MonoBehaviour
 
     public void OnMove(InputValue inputValue)
     {
+        Vector2 newMovement = inputValue.Get<Vector2>();
+
+        // A non-zero movement input causes a hidden player to leave their hiding spot.
+        if (isHidden)
+        {
+            if (newMovement.sqrMagnitude == 0)
+            {
+                return;
+            }
+
+            reappear();
+        }
+
         // Save the previous movement for reference when stopping
         prevMovement = curMovement;
     
         // Calculate the current movement based on the input direction and the player speed
-        Vector2 newMovement = inputValue.Get<Vector2>();
         newMovement = newMovement.normalized; // normalize to keep only the directional info
         curMovement = new Vector3(newMovement.x, 0, newMovement.y) * Time.fixedDeltaTime * speed;
     }
@@ -81,6 +104,34 @@ public class PlayerMovement : MonoBehaviour
     public Vector3 getProjectedPosition()
     {
         return transform.position + curMovement;
+    }
+
+    /**
+     * Hides the player and stores the position where they will reappear.
+     */
+    public void Hide(Vector3 exitPosition)
+    {
+        isHidden = true;
+        hidingExitPosition = exitPosition;
+
+        // Stop all existing movement before disabling the player's physical presence.
+        curMovement = Vector3.zero;
+        prevMovement = Vector3.zero;
+        phase = MovementPhase.Stopped;
+        rigidbody.linearVelocity = Vector3.zero;
+        rigidbody.isKinematic = true;
+        playerModel.SetActive(false);
+    }
+
+    /**
+     * Restores the player at the hiding spot's exit position.
+     */
+    private void reappear()
+    {
+        rigidbody.position = hidingExitPosition;
+        playerModel.SetActive(true);
+        rigidbody.isKinematic = false;
+        isHidden = false;
     }
 
     private void applyMovement()
