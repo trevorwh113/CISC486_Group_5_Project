@@ -65,8 +65,11 @@ public class Chase : MonoBehaviour
         // Player has been caught if we are within a certain range
         if (Vector3.Distance(transform.position, projectedPosition) < stoppingDistance)
         {
+            isChasing = false;
+            
             // Signal that the player has been caught
             GameEvents.guardReachedPlayer.Invoke();
+            return;
         }
         else
         {

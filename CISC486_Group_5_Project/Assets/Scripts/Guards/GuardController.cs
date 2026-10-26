@@ -40,11 +40,6 @@ public class GuardController : MonoBehaviour
 
     void Start()
     {
-        // Detect when the player has been reached during chase
-        // TODO: Will cause issue if the player remaisn in the line of sight
-        // TODO: Could cause issue if the player is caught before pathforming occurs
-        GameEvents.guardReachedPlayer.AddListener(playerCaught);
-
         // The guard starts off by watching while patrolling
         phase = GuardMovementPhase.Patrolling;
         patrol.startFollowingPath();
@@ -83,11 +78,5 @@ public class GuardController : MonoBehaviour
         // Resume path following and watching out for the player
         vision.startWatching();
         patrol.resumeFollowingPath();
-    }
-
-    private void playerCaught()
-    {
-        Debug.Log("Player has been caught! Stop chasing.");
-        stopChasingAndResumePath();
     }
 }
