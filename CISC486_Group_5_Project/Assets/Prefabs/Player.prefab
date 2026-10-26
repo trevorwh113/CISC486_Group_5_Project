@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 5473183757166707358}
   m_Layer: 2
   m_Name: Player
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -81,6 +81,7 @@ MonoBehaviour:
   speed: 8
   decceleration: 0.8
   stoppingDistance: 10
+  playerModel: {fileID: 2205621879957179682}
 --- !u!54 &5473183757166707358
 Rigidbody:
   m_ObjectHideFlags: 0

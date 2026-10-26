@@ -26,10 +26,13 @@ public class Chase : MonoBehaviour
 
     /** Indicates whether player chasing is activated */
     private bool isChasing = false;
+    /** Allows lockdown chasing to continue while the player is hidden */
+    private bool tracksHiddenPlayer = false;
 
     void FixedUpdate()
     {
-        if (isChasing)
+        // Normal chases respect hiding, while lockdown chases always track the player.
+        if (isChasing && (!player.IsHidden || tracksHiddenPlayer))
         {
             chasePlayer();
         }
@@ -43,6 +46,14 @@ public class Chase : MonoBehaviour
         isChasing = true;
         walkSpeed = navAgent.speed;
         navAgent.speed *= chaseRate;
+    }
+
+    /**
+     * Allows this guard to keep tracking the player during lockdown.
+     */
+    public void enableLockdownTracking()
+    {
+        tracksHiddenPlayer = true;
     }
 
     /** 
