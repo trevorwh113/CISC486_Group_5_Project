@@ -24,6 +24,10 @@ public class PlayerMovement : MonoBehaviour
     [Tooltip("The basic walking speed for the player. The great the value, the faster they move (range: 0+).")]
     public float speed;
 
+    [Header("Rotation")]
+    [Tooltip("How quickly the player turns in degrees per second.")]
+    [SerializeField] private float rotationSpeed = 720f;
+
     [Header("Stopping")]
     [Tooltip("The rate at which the player slows after releasing input. The greater the value, the faster they stop (range: 0-1).")]
     public float decceleration;
@@ -138,6 +142,16 @@ public class PlayerMovement : MonoBehaviour
     {
         // Begin movement and apply the current movement
         phase = MovementPhase.Moving;
+
+        // Smoothly rotate the player's forward direction toward their movement.
+        Quaternion targetRotation = Quaternion.LookRotation(curMovement.normalized, Vector3.up);
+        Quaternion nextRotation = Quaternion.RotateTowards(
+            rigidbody.rotation,
+            targetRotation,
+            rotationSpeed * Time.fixedDeltaTime
+        );
+        rigidbody.MoveRotation(nextRotation);
+
         Vector3 target = transform.position + curMovement;
         rigidbody.MovePosition(target);
     }
