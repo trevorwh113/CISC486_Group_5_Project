@@ -115,4 +115,10 @@ public class GuardController : MonoBehaviour
             startChasingAndStopWatching();
         }
     }
+
+    void OnDestroy()
+    {
+        GameEvents.guardReachedPlayer.RemoveListener(playerCaught);
+        GameEvents.allServersScored.RemoveListener(activateLockdown);
+    }
 }
