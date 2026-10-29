@@ -46,6 +46,14 @@ public class Sweeping : MonoBehaviour
     {
         initialRotation = transform.localEulerAngles;
 
+        if (player == null)
+        {
+            GameObject playerObject =
+                GameObject.FindGameObjectWithTag("Player");
+            if (playerObject != null)
+                player = playerObject.transform;
+        }
+
         // Find players collision box
         if (player != null && playerCollider == null)
         {
@@ -231,13 +239,18 @@ public class Sweeping : MonoBehaviour
         if (angle > viewAngle / 2f)
             return false;
 
+        // Player is on Ignore Raycast (layer 2); include its layer
+        int layerMask =
+            Physics.DefaultRaycastLayers |
+            (1 << player.gameObject.layer);
+
         // Check line of sight
         if (Physics.Raycast(
             transform.position,
             direction.normalized,
             out RaycastHit hit,
             distance,
-            Physics.DefaultRaycastLayers,
+            layerMask,
             QueryTriggerInteraction.Ignore))
         {
             // Check whether we hit the player
