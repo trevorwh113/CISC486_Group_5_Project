@@ -58,8 +58,7 @@ public class PlayerMovement : MonoBehaviour
 
     public void Start()
     {
-        // Detect when the player has been caught by a guard
-        GameEvents.guardReachedPlayer.AddListener(playerCaught);
+        
     }
 
     public void OnMove(InputValue inputValue)
@@ -188,12 +187,4 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
-    private void playerCaught()
-    {
-        // TODO: Decide what to actually do
-        // Currently, moving the player away. Probably it would actually 
-        // be warped back to a center position
-        // TODO: Maybe move this to a different script if appropriate (i.e. player controller, win/loseController)
-        rigidbody.MovePosition(transform.position + new Vector3(30,0,0));
-    }
 }
