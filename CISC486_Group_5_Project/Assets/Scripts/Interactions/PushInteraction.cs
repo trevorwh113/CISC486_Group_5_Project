@@ -33,47 +33,53 @@ public class PushInteraction : MonoBehaviour
 
     private void Update()
     {
-        if (playerTouching)
+        if (playerTouching && Keyboard.current.eKey.wasPressedThisFrame)
         {
-            if (Keyboard.current.eKey.wasPressedThisFrame)
-            {
-                // Apply a push force based on position and strength
-                rigidbody.AddForce(direction * strength, ForceMode.Impulse);
-            }
+            // Apply a push force based on position and strength
+            rigidbody.AddForce(direction * strength, ForceMode.Impulse);
+            Debug.Log("Pushing in direction: " + direction);
         }
     }
 
-    private void OnTriggerEnter(Collider other)
+    private void OnTriggerEnter(Collider trigger)
     {
         // The player's collider is on a child, so check its attached root Rigidbody.
-        if (other.attachedRigidbody.CompareTag("Player"))
+        if (triggerIsPlayer(trigger))
         {
             playerTouching = true;
             interactionPromptText.text = "Press E to push";
             interactionPrompt.SetActive(true);
-            setPushDirection(other);
+            setPushDirection(trigger);
         }
     }
 
-    private void OnTriggerStay(Collider other)
+    private void OnTriggerStay(Collider trigger)
     {
-        if (other.attachedRigidbody.CompareTag("Player"))
+        if (triggerIsPlayer(trigger))
         {
-            setPushDirection(other);
+            setPushDirection(trigger);
         }
     }
 
-    private void OnTriggerExit(Collider other)
+    private void OnTriggerExit(Collider trigger)
     {
-        if (other.attachedRigidbody.CompareTag("Player"))
+        if (triggerIsPlayer(trigger))
         {
             playerTouching = false;
             interactionPrompt.SetActive(false);
         }
     }
 
-    private void setPushDirection(Collider other)
+    private void setPushDirection(Collider trigger)
     {
-        direction = (transform.position - other.transform.position).normalized;
+        direction = (transform.position - trigger.transform.position).normalized;
+        direction.y = 0;
+    }
+
+    static private bool triggerIsPlayer(Collider trigger)
+    {
+        return trigger 
+                && trigger.attachedRigidbody 
+                && trigger.attachedRigidbody.CompareTag("Player");
     }
 }
