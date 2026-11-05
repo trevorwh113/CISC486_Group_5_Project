@@ -15,7 +15,8 @@ public class GuardController : MonoBehaviour
     enum GuardMovementPhase
     {
         Chasing,
-        Patrolling
+        Patrolling,
+        Investigating
     }
 
     [Header("Movement Behaviours")]
@@ -40,6 +41,11 @@ public class GuardController : MonoBehaviour
     /** Prevents guards from abandoning the chase after every server is scored */
     private bool lockdownActive;
 
+    [Header("Camera Alerts")]
+    [Tooltip("Maximum distance from a camera's last-seen position for this guard to investigate.")]
+    [Min(0f)]
+    public float cameraAlertRadius = 15f;
+
     void Start()
     {
         // Detect when the player has been reached during chase
@@ -48,6 +54,8 @@ public class GuardController : MonoBehaviour
         GameEvents.guardReachedPlayer.AddListener(playerCaught);
         // Begin permanent pursuit when the level objective is completed.
         GameEvents.allServersScored.AddListener(activateLockdown);
+        // Detect when player was spotted by camera and investigate last known position
+        GameEvents.cameraSpottedPlayer.AddListener(respondToCameraAlert);
 
         // The guard starts off by watching while patrolling
         phase = GuardMovementPhase.Patrolling;
@@ -61,6 +69,11 @@ public class GuardController : MonoBehaviour
         if (phase != GuardMovementPhase.Chasing && vision.playerSpotted())
         {
             startChasingAndStopWatching();
+        }
+        else if (phase == GuardMovementPhase.Investigating && patrol.hasReachedInvestigationTarget())
+        {
+            phase = GuardMovementPhase.Patrolling;
+            patrol.stopInvestigation();
         }
         // Normal chases end outside the vision distance; lockdown chases never end.
         if (!lockdownActive &&
@@ -116,9 +129,23 @@ public class GuardController : MonoBehaviour
         }
     }
 
+    private void respondToCameraAlert(Vector3 lastKnownPosition)
+    {
+       if (lockdownActive || phase == GuardMovementPhase.Chasing ||
+            Vector3.Distance(transform.position, lastKnownPosition) > cameraAlertRadius)
+        {
+            return;
+        }
+
+        phase = GuardMovementPhase.Investigating;
+        patrol.stopFollowingPath();
+        patrol.investigatePosition(lastKnownPosition);
+    }
+
     void OnDestroy()
     {
         GameEvents.guardReachedPlayer.RemoveListener(playerCaught);
         GameEvents.allServersScored.RemoveListener(activateLockdown);
+        GameEvents.cameraSpottedPlayer.RemoveListener(respondToCameraAlert);
     }
 }

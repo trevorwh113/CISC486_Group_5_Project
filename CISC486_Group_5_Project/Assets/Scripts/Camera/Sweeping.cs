@@ -42,6 +42,11 @@ public class Sweeping : MonoBehaviour
     private Vector3 lastKnownPlayerPosition;
     private bool returningToSweep;
 
+    [Header("Guard Alerts")]
+    [Min(0.1f)]
+    public float alertInterval = 3f;
+    private float nextAlertTime;
+
     void Start()
     {
         initialRotation = transform.localEulerAngles;
@@ -85,6 +90,12 @@ public class Sweeping : MonoBehaviour
         if (detected && !isPlayerDetected)
         {
             Debug.Log("Player detected!");
+            if(Time.time >= nextAlertTime)
+            {
+                GameEvents.cameraSpottedPlayer.Invoke(lastKnownPlayerPosition);
+                nextAlertTime = Time.time + alertInterval;
+            }
+            GameEvents.cameraSpottedPlayer.Invoke(lastKnownPlayerPosition);
         }
 
         if (!detected && isPlayerDetected)
