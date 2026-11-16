@@ -64,6 +64,7 @@ public class PlayerMovement : MonoBehaviour
     public void OnMove(InputValue inputValue)
     {
         Vector2 newMovement = inputValue.Get<Vector2>();
+        newMovement = newMovement.normalized; // normalize to keep only the directional info
 
         // A non-zero movement input causes a hidden player to leave their hiding spot.
         if (isHidden)
@@ -72,7 +73,6 @@ public class PlayerMovement : MonoBehaviour
             {
                 return;
             }
-
             reappear();
         }
 
@@ -80,7 +80,6 @@ public class PlayerMovement : MonoBehaviour
         prevMovement = curMovement;
     
         // Calculate the current movement based on the input direction and the player speed
-        newMovement = newMovement.normalized; // normalize to keep only the directional info
         curMovement = new Vector3(newMovement.x, 0, newMovement.y) * Time.fixedDeltaTime * speed;
     }
 
@@ -99,14 +98,28 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
+    /*
+     * Public accessor method for the player position
+     */
     public Vector3 getCurrentPosition()
     {
         return transform.position;
     }
 
+    /*
+     * Public accessor method for the projected player position
+     */
     public Vector3 getProjectedPosition()
     {
         return transform.position + curMovement;
+    }
+
+    /*
+     * Public accessor method for the direction in which the player is facing
+     */
+    public Vector3 getDirection()
+    {
+        return transform.forward;
     }
 
     /**
@@ -149,7 +162,7 @@ public class PlayerMovement : MonoBehaviour
             targetRotation,
             rotationSpeed * Time.fixedDeltaTime
         );
-        rigidbody.MoveRotation(nextRotation);
+        rigidbody.MoveRotation(nextRotation);            
 
         Vector3 target = transform.position + curMovement;
         rigidbody.MovePosition(target);
@@ -187,4 +200,10 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
+    public void hardStop()
+    {
+        phase = MovementPhase.Stopped;
+        prevMovement = curMovement;
+        curMovement = Vector2.zero;
+    }
 }

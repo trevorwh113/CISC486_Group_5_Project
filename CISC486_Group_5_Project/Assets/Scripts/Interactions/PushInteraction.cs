@@ -1,16 +1,16 @@
+using System;
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
 /**
- * Handles push and slide mechanics for certain obstacles
+ * Handles push mechanics for obstacles. The player holds down
+ * a button to push. While pushing, the player can only move in
+ * one direction and movement is slowed.
  */
 public class PushInteraction : MonoBehaviour
 {
-    [Header("Push strength")]
-    [Tooltip("The strength of the push impulse.")]
-    [SerializeField] private float strength = 1f;
-
     [Header("Label")]
     [Tooltip("The world-space Canvas displayed above the server.")]
     [SerializeField] private GameObject interactionPrompt;
@@ -20,64 +20,58 @@ public class PushInteraction : MonoBehaviour
     [Header("Obstacle Information")]
     [SerializeField] private Rigidbody rigidbody;
 
-    /** Whether the player is currently inside the server's trigger */
-    private bool playerTouching;
-    /** The direction from player to obstacle */
-    private Vector3 direction;
+    private PlayerMovement player;
 
     private void Awake()
     {
         // The prompt should only be visible while the player is in range.
         interactionPrompt.SetActive(false);
+
+        // Make the object immovable by default
+        rigidbody.isKinematic = true;
     }
 
-    private void Update()
+    private void OnTriggerEnter(Collider other)
     {
-        if (playerTouching && Keyboard.current.eKey.wasPressedThisFrame)
+        if (triggerIsPlayer(other))
         {
-            // Apply a push force based on position and strength
-            rigidbody.AddForce(direction * strength, ForceMode.Impulse);
-            Debug.Log("Pushing in direction: " + direction);
-        }
-    }
-
-    private void OnTriggerEnter(Collider trigger)
-    {
-        // The player's collider is on a child, so check its attached root Rigidbody.
-        if (triggerIsPlayer(trigger))
-        {
-            playerTouching = true;
-            interactionPromptText.text = "Press E to push";
+            player = other.attachedRigidbody.GetComponent<PlayerMovement>();
+            // Display the interaction text
+            interactionPromptText.text = "Hold E to push";
             interactionPrompt.SetActive(true);
-            setPushDirection(trigger);
         }
     }
 
-    private void OnTriggerStay(Collider trigger)
+    private void OnTriggerStay(Collider other)
     {
-        if (triggerIsPlayer(trigger))
+        if (triggerIsPlayer(other))
         {
-            setPushDirection(trigger);
+            if (Keyboard.current.eKey.isPressed)
+            {
+                // Object should only be affect by forces when E is pressed
+                rigidbody.isKinematic = false;
+            }
         }
     }
 
-    private void OnTriggerExit(Collider trigger)
+    private void OnTriggerExit(Collider other)
     {
-        if (triggerIsPlayer(trigger))
+        if (triggerIsPlayer(other))
         {
-            playerTouching = false;
+            // Make the object immovable again
+            rigidbody.isKinematic = true;
+
+            // Hide the interaction text
             interactionPrompt.SetActive(false);
         }
     }
 
-    private void setPushDirection(Collider trigger)
-    {
-        direction = (transform.position - trigger.transform.position).normalized;
-        direction.y = 0;
-    }
-
+    /*
+     * Returns true if the colliding object is the player
+     */
     static private bool triggerIsPlayer(Collider trigger)
     {
+        // The player's collider is on a child, so check its attached root Rigidbody.
         return trigger 
                 && trigger.attachedRigidbody 
                 && trigger.attachedRigidbody.CompareTag("Player");
