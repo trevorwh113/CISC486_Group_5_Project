@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -38,6 +39,8 @@ public class PlayerMovement : MonoBehaviour
     [Tooltip("The child object containing the player's model and collider.")]
     [SerializeField] private GameObject playerModel;
 
+    /** Weight of objects held or carried by the player. Slows movement speed. */
+    private float totalWeight = 1;
     /** The latest movement vector calculated from input */
     private Vector3 curMovement = new Vector3(0,0,0);
     /** The previous movement vector calculated from input */
@@ -64,8 +67,11 @@ public class PlayerMovement : MonoBehaviour
     public void OnMove(InputValue inputValue)
     {
         Vector2 newMovement = inputValue.Get<Vector2>();
-        newMovement = newMovement.normalized; // normalize to keep only the directional info
+        updateCurrentMovement(newMovement);
+    }
 
+    private void updateCurrentMovement(Vector2 newMovement)
+    {
         // A non-zero movement input causes a hidden player to leave their hiding spot.
         if (isHidden)
         {
@@ -80,7 +86,8 @@ public class PlayerMovement : MonoBehaviour
         prevMovement = curMovement;
     
         // Calculate the current movement based on the input direction and the player speed
-        curMovement = new Vector3(newMovement.x, 0, newMovement.y) * Time.fixedDeltaTime * speed;
+        newMovement = newMovement.normalized; // normalize to keep only the directional info
+        curMovement = new Vector3(newMovement.x, 0, newMovement.y) * Time.fixedDeltaTime * (speed / totalWeight);
     }
 
     void FixedUpdate()
@@ -200,10 +207,36 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
-    public void hardStop()
+    public void addWeight(float weight)
     {
-        phase = MovementPhase.Stopped;
-        prevMovement = curMovement;
-        curMovement = Vector2.zero;
+        // Add the weight then re-calculate the movement
+        totalWeight += weight;
+        updateCurrentMovement(curMovement);
+    }
+    public void removeWeight(float weight)
+    {
+        // Remove the weight and re-calculate the movement
+        totalWeight -= weight;
+        totalWeight = Math.Max(totalWeight, 1);
+        updateCurrentMovement(curMovement);
+    }
+
+    public void moveObject(Rigidbody obj)
+    {
+        if (curMovement.magnitude != 0)
+        {
+            Vector3 target = obj.transform.position + curMovement;
+            obj.MovePosition(target);
+        }
+
+        else if (phase != MovementPhase.Stopped)
+        {
+            float curStoppingDistance = Mathf.Max(MIN_STOPPING_SPEED, remStoppingDistance * decceleration);
+            Vector3 target = obj.transform.position + Vector3.ClampMagnitude(prevMovement, curStoppingDistance);
+            obj.MovePosition(target);
+        }
+
+        // TODO: Small bug where repeatedly pressing the buttom pushes the box further and further out
+        // TODO: Small bug where pushing up/down gets stuck and you have to press the arrow key again
     }
 }

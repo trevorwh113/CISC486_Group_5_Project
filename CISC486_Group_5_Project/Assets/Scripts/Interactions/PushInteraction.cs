@@ -1,5 +1,3 @@
-using System;
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -22,6 +20,11 @@ public class PushInteraction : MonoBehaviour
 
     private PlayerMovement player;
 
+    public float weight;
+
+    private bool isTouching = false;
+    private bool isPushing = false;
+
     private void Awake()
     {
         // The prompt should only be visible while the player is in range.
@@ -31,26 +34,41 @@ public class PushInteraction : MonoBehaviour
         rigidbody.isKinematic = true;
     }
 
+    private void Update()
+    {
+        if (isTouching)
+        {
+            if (Keyboard.current.eKey.wasPressedThisFrame)
+            {
+                rigidbody.isKinematic = false;
+                player.addWeight(weight);
+                isPushing = true;
+            }
+        }
+        if (isPushing)
+        {
+            if (Keyboard.current.eKey.isPressed)
+            {
+                player.moveObject(rigidbody);
+            }
+            if (Keyboard.current.eKey.wasReleasedThisFrame)
+            {
+                rigidbody.isKinematic = true;
+                player.removeWeight(weight);
+                isPushing = false;
+            }
+        }
+    }
+
     private void OnTriggerEnter(Collider other)
     {
         if (triggerIsPlayer(other))
         {
             player = other.attachedRigidbody.GetComponent<PlayerMovement>();
+            isTouching = true;
             // Display the interaction text
             interactionPromptText.text = "Hold E to push";
             interactionPrompt.SetActive(true);
-        }
-    }
-
-    private void OnTriggerStay(Collider other)
-    {
-        if (triggerIsPlayer(other))
-        {
-            if (Keyboard.current.eKey.isPressed)
-            {
-                // Object should only be affect by forces when E is pressed
-                rigidbody.isKinematic = false;
-            }
         }
     }
 
@@ -58,9 +76,7 @@ public class PushInteraction : MonoBehaviour
     {
         if (triggerIsPlayer(other))
         {
-            // Make the object immovable again
-            rigidbody.isKinematic = true;
-
+            isTouching = false;
             // Hide the interaction text
             interactionPrompt.SetActive(false);
         }
