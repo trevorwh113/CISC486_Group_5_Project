@@ -90,17 +90,20 @@ public class Sweeping : MonoBehaviour
         if (detected && !isPlayerDetected)
         {
             Debug.Log("Player detected!");
-            if(Time.time >= nextAlertTime)
-            {
-                GameEvents.cameraSpottedPlayer.Invoke(lastKnownPlayerPosition);
-                nextAlertTime = Time.time + alertInterval;
-            }
+        }
+
+        // Invoke alert in a controlled time to prevent spamming
+        if (detected && Time.time >= nextAlertTime)
+        {
             GameEvents.cameraSpottedPlayer.Invoke(lastKnownPlayerPosition);
+            nextAlertTime = Time.time + Mathf.Max(0.1f, alertInterval);
         }
 
         if (!detected && isPlayerDetected)
         {
             Debug.Log("Player lost!");
+            // Reset alert time if player leaves and re-enters view
+            nextAlertTime = Time.time;
         }
 
         isPlayerDetected = detected;
@@ -253,7 +256,8 @@ public class Sweeping : MonoBehaviour
         // Player is on Ignore Raycast (layer 2); include its layer
         int layerMask =
             Physics.DefaultRaycastLayers |
-            (1 << player.gameObject.layer);
+            (1 << player.gameObject.layer) |
+            (1 << playerCollider.gameObject.layer);
 
         // Check line of sight
         if (Physics.Raycast(

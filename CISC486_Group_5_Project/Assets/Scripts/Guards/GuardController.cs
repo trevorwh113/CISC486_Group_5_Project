@@ -131,8 +131,10 @@ public class GuardController : MonoBehaviour
 
     private void respondToCameraAlert(Vector3 lastKnownPosition)
     {
+       // Make sure alert radius is always non-negative
+       float alertRadius = Mathf.Max(0f, cameraAlertRadius);
        if (lockdownActive || phase == GuardMovementPhase.Chasing ||
-            Vector3.Distance(transform.position, lastKnownPosition) > cameraAlertRadius)
+            Vector3.Distance(transform.position, lastKnownPosition) > alertRadius)
         {
             return;
         }
