@@ -19,6 +19,12 @@ public class Pathfollowing : MonoBehaviour
     /** Indicates whether path following is activated */
     private bool isFollowingPath = false;
 
+    private bool isInvestigating = false;
+
+    [Header("Stopping")]
+    [Tooltip("How close to the last known position the enemy gets before stopping (range: 0+).")]
+    public float stoppingDistance;
+
     void FixedUpdate()
     {
         if (isFollowingPath && hasArrivedAtTarget())
@@ -82,6 +88,26 @@ public class Pathfollowing : MonoBehaviour
     public void stopFollowingPath()
     {
         isFollowingPath = false;
+    }
+
+    public void investigatePosition(Vector3 position)
+    {
+        isFollowingPath = false;
+        isInvestigating = true;
+        navAgent.SetDestination(position);
+    }
+
+    public bool hasReachedInvestigationTarget()
+    {
+        return isInvestigating &&
+               !navAgent.pathPending &&
+               navAgent.remainingDistance <= Mathf.Max(stoppingDistance, navAgent.stoppingDistance);
+    }
+
+    public void stopInvestigation()
+    {
+        isInvestigating = false;
+        resumeFollowingPath();
     }
 
     // TODO: Work this into a behaviour on the guard itself
