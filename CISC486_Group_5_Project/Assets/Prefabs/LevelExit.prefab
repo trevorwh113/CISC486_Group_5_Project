@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 8139142317893800167}
   - component: {fileID: 132302105343720136}
   - component: {fileID: 648053888124804995}
+  - component: {fileID: 2461174765697658193}
   m_Layer: 0
   m_Name: LevelExit
   m_TagString: Untagged
@@ -125,3 +126,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d584f175c37ccf0e59de2a51a77b74b5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::WinZone
+--- !u!114 &2461174765697658193
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 175634308898617595}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1e3fdca004f2d45fe8abbed571a8abd5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.AI.Navigation::Unity.AI.Navigation.NavMeshModifier
+  m_SerializedVersion: 0
+  m_OverrideArea: 0
+  m_Area: 0
+  m_OverrideGenerateLinks: 0
+  m_GenerateLinks: 0
+  m_IgnoreFromBuild: 1
+  m_ApplyToChildren: 1
+  m_AffectedAgents: ffffffffi
