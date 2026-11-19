@@ -42,16 +42,12 @@ public class ServerInteraction : MonoBehaviour, IInteractable
 
     public void Interact(PlayerMovement player)
     {
-        if (!hasGrantedPoint && interactionCoroutine == null)
-        // Start one interaction timer when the nearby player presses E.
-        if (playerTouching &&
-            !hasGrantedPoint &&
+        if (!hasGrantedPoint &&
             interactionCoroutine == null &&
-            Keyboard.current != null &&
-            Keyboard.current.eKey.wasPressedThisFrame)
+            (!GameManager.Instance.IsFinalServer(this) ||
+             GameManager.Instance.FinalDoorUnlocked))
         {
-            if (!GameManager.Instance.IsFinalServer(this) || GameManager.Instance.FinalDoorUnlocked)
-                interactionCoroutine = StartCoroutine(InteractionTimer());
+            interactionCoroutine = StartCoroutine(InteractionTimer());
         }
     }
 
