@@ -3186,6 +3186,12 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 1579687469576308, guid: db9fb8bf112e6b0458147765e27fc54a, type: 3}
       insertIndex: -1
       addedObject: {fileID: 678459034}
+    - targetCorrespondingSourceObject: {fileID: 1579687469576308, guid: db9fb8bf112e6b0458147765e27fc54a, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 678459038}
+    - targetCorrespondingSourceObject: {fileID: 1579687469576308, guid: db9fb8bf112e6b0458147765e27fc54a, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 678459039}
   m_SourcePrefab: {fileID: 100100000, guid: db9fb8bf112e6b0458147765e27fc54a, type: 3}
 --- !u!1001 &412010049
 PrefabInstance:
@@ -5161,6 +5167,43 @@ MonoBehaviour:
   m_IgnoreFromBuild: 1
   m_ApplyToChildren: 1
   m_AffectedAgents: ffffffffi
+--- !u!114 &678459038
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 678459030}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4bf703f769f54580a93e106fd34ad75e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DoorKeypad
+  finalServer: {fileID: 1110556024}
+  interactionPoint: {fileID: 0}
+  interactionDistance: 2.5
+  doorToOpen: {fileID: 0}
+--- !u!65 &678459039
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 678459030}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1.1185136, y: 2.0849233, z: 0.13779916}
+  m_Center: {x: 0, y: -0.0024617314, z: 0}
 --- !u!1001 &679342936
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -9043,6 +9086,17 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 6097847858474040516, guid: 361d0f1fd2935c5428db7326053b81de, type: 3}
   m_PrefabInstance: {fileID: 1105774167}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1110556024 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5435485598884770426, guid: 833aa993d5035a41f8153e49dd5efc3e, type: 3}
+  m_PrefabInstance: {fileID: 884734758}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa3ece95aee6f1269a044948d38b0ebd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ServerInteraction
 --- !u!1001 &1111706905
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -15009,6 +15063,18 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6157977164274718748, guid: 8aaec8702c318496f83b8b989b464a58, type: 3}
       propertyPath: m_SizeDelta.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6157977164274718748, guid: 8aaec8702c318496f83b8b989b464a58, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6157977164274718748, guid: 8aaec8702c318496f83b8b989b464a58, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6157977164274718748, guid: 8aaec8702c318496f83b8b989b464a58, type: 3}
+      propertyPath: m_LocalScale.z
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6157977164274718748, guid: 8aaec8702c318496f83b8b989b464a58, type: 3}
