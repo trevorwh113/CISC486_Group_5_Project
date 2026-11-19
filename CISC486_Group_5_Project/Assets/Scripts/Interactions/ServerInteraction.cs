@@ -43,8 +43,15 @@ public class ServerInteraction : MonoBehaviour, IInteractable
     public void Interact(PlayerMovement player)
     {
         if (!hasGrantedPoint && interactionCoroutine == null)
+        // Start one interaction timer when the nearby player presses E.
+        if (playerTouching &&
+            !hasGrantedPoint &&
+            interactionCoroutine == null &&
+            Keyboard.current != null &&
+            Keyboard.current.eKey.wasPressedThisFrame)
         {
-            interactionCoroutine = StartCoroutine(InteractionTimer());
+            if (!GameManager.Instance.IsFinalServer(this) || GameManager.Instance.FinalDoorUnlocked)
+                interactionCoroutine = StartCoroutine(InteractionTimer());
         }
     }
 
@@ -62,6 +69,9 @@ public class ServerInteraction : MonoBehaviour, IInteractable
 
         // Completing the timer consumes this server's point permanently.
         hasGrantedPoint = true;
+        //if the server is not final, generate password digit
+        if (!GameManager.Instance.IsFinalServer(this))
+            GameManager.Instance.CollectCodeDigit();
         ScoreManager.Instance.RegisterServerScored();
         interactionPrompt.SetActive(false);
         interactionCoroutine = null;
@@ -70,7 +80,7 @@ public class ServerInteraction : MonoBehaviour, IInteractable
     private void OnTriggerEnter(Collider other)
     {
         // The player's collider is on a child, so check its attached root Rigidbody.
-        if (other.attachedRigidbody.CompareTag("Player"))
+        if (other.attachedRigidbody != null && other.attachedRigidbody.CompareTag("Player"))
         {
             other.attachedRigidbody
                 .GetComponent<PlayerInteraction>()
@@ -80,7 +90,7 @@ public class ServerInteraction : MonoBehaviour, IInteractable
 
     private void OnTriggerExit(Collider other)
     {
-        if (other.attachedRigidbody.CompareTag("Player"))
+        if (other.attachedRigidbody != null && other.attachedRigidbody.CompareTag("Player"))
         {
             other.attachedRigidbody
                 .GetComponent<PlayerInteraction>()
