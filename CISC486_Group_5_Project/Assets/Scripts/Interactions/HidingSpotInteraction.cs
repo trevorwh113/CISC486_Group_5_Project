@@ -1,12 +1,11 @@
 using TMPro;
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 /**
  * Allows the player to enter a hiding spot by pressing E while inside its
  * interaction trigger.
  */
-public class HidingSpotInteraction : MonoBehaviour
+public class HidingSpotInteraction : MonoBehaviour, IInteractable
 {
     [Tooltip("The position where the player will reappear after leaving the hiding spot.")]
     [SerializeField] private Transform exitPoint;
@@ -17,10 +16,16 @@ public class HidingSpotInteraction : MonoBehaviour
 
     /** The player currently inside the interaction trigger */
     private PlayerMovement player;
+    /** The interaction controller belonging to the nearby player */
+    private PlayerInteraction playerInteraction;
     /** Whether the player is close enough to use this hiding spot */
     private bool playerInRange;
     /** Whether the player is hidden and waiting for movement input */
     private bool waitingForExit;
+
+    public Transform InteractionTransform => transform;
+    public bool CanInteract => !waitingForExit;
+    public bool IsInteracting => waitingForExit;
 
     private void Awake()
     {
@@ -38,21 +43,42 @@ public class HidingSpotInteraction : MonoBehaviour
                 waitingForExit = false;
                 interactionPrompt.SetActive(false);
                 player = null;
+                playerInteraction = null;
             }
 
             return;
         }
+    }
 
-        // Enter the hiding spot when the nearby player presses E.
-        if (playerInRange && Keyboard.current.eKey.wasPressedThisFrame)
+    public void SetSelected(bool selected)
+    {
+        if (waitingForExit)
         {
-            // Set this state before hiding because disabling the player collider
-            // causes it to leave the interaction trigger.
-            waitingForExit = true;
-            playerInRange = false;
-            interactionPromptText.text = "Move to exit";
-            player.Hide(exitPoint.position);
+            return;
         }
+
+        if (selected)
+        {
+            interactionPromptText.text = "Press E to hide";
+        }
+
+        interactionPrompt.SetActive(selected);
+    }
+
+    public void Interact(PlayerMovement interactingPlayer)
+    {
+        if (!playerInRange || waitingForExit)
+        {
+            return;
+        }
+
+        // Set this state before hiding because disabling the player collider
+        // causes it to leave the interaction trigger.
+        waitingForExit = true;
+        playerInRange = false;
+        interactionPromptText.text = "Move to exit";
+        player = interactingPlayer;
+        player.Hide(exitPoint.position);
     }
 
     private void OnTriggerEnter(Collider other)
@@ -61,9 +87,9 @@ public class HidingSpotInteraction : MonoBehaviour
         if (!waitingForExit && other.attachedRigidbody.CompareTag("Player"))
         {
             player = other.attachedRigidbody.GetComponent<PlayerMovement>();
+            playerInteraction = other.attachedRigidbody.GetComponent<PlayerInteraction>();
             playerInRange = true;
-            interactionPromptText.text = "Press E to hide";
-            interactionPrompt.SetActive(true);
+            playerInteraction.Register(this);
         }
     }
 
@@ -73,8 +99,15 @@ public class HidingSpotInteraction : MonoBehaviour
         if (!waitingForExit && other.attachedRigidbody.CompareTag("Player"))
         {
             playerInRange = false;
-            interactionPrompt.SetActive(false);
+            playerInteraction.Unregister(this);
             player = null;
+            playerInteraction = null;
+        }
+        else if (waitingForExit && other.attachedRigidbody.CompareTag("Player"))
+        {
+            // Keep the exit instruction visible while removing this spot from
+            // the nearby candidates after the hidden collider is disabled.
+            playerInteraction.Unregister(this, false);
         }
     }
 }

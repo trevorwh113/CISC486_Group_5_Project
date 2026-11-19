@@ -1,13 +1,12 @@
 using System.Collections;
 using TMPro;
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 /**
  * Handles timed server interactions and awards one point when the player
  * remains in range for the full interaction duration.
  */
-public class ServerInteraction : MonoBehaviour
+public class ServerInteraction : MonoBehaviour, IInteractable
 {
     [Tooltip("How long the player must remain in range to complete the interaction.")]
     [SerializeField] private float interactionDuration = 1f;
@@ -16,12 +15,14 @@ public class ServerInteraction : MonoBehaviour
     [Tooltip("The text used for the interaction instruction and countdown.")]
     [SerializeField] private TMP_Text interactionPromptText;
 
-    /** Whether the player is currently inside the server's trigger */
-    private bool playerTouching;
     /** Prevents this server instance from granting more than one point */
     private bool hasGrantedPoint;
     /** The active timer, or null when no interaction is in progress */
     private Coroutine interactionCoroutine;
+
+    public Transform InteractionTransform => transform;
+    public bool CanInteract => !hasGrantedPoint;
+    public bool IsInteracting => interactionCoroutine != null;
 
     private void Awake()
     {
@@ -29,13 +30,19 @@ public class ServerInteraction : MonoBehaviour
         interactionPrompt.SetActive(false);
     }
 
-    private void Update()
+    public void SetSelected(bool selected)
     {
-        // Start one interaction timer when the nearby player presses E.
-        if (playerTouching &&
-            !hasGrantedPoint &&
-            interactionCoroutine == null &&
-            Keyboard.current.eKey.wasPressedThisFrame)
+        if (selected && !hasGrantedPoint)
+        {
+            interactionPromptText.text = "Press E to steal";
+        }
+
+        interactionPrompt.SetActive(selected && !hasGrantedPoint);
+    }
+
+    public void Interact(PlayerMovement player)
+    {
+        if (!hasGrantedPoint && interactionCoroutine == null)
         {
             interactionCoroutine = StartCoroutine(InteractionTimer());
         }
@@ -65,13 +72,9 @@ public class ServerInteraction : MonoBehaviour
         // The player's collider is on a child, so check its attached root Rigidbody.
         if (other.attachedRigidbody.CompareTag("Player"))
         {
-            playerTouching = true;
-
-            if (!hasGrantedPoint)
-            {
-                interactionPromptText.text = "Press E to steal";
-                interactionPrompt.SetActive(true);
-            }
+            other.attachedRigidbody
+                .GetComponent<PlayerInteraction>()
+                .Register(this);
         }
     }
 
@@ -79,8 +82,9 @@ public class ServerInteraction : MonoBehaviour
     {
         if (other.attachedRigidbody.CompareTag("Player"))
         {
-            playerTouching = false;
-            interactionPrompt.SetActive(false);
+            other.attachedRigidbody
+                .GetComponent<PlayerInteraction>()
+                .Unregister(this);
 
             // Leaving early cancels the timer without consuming the server's point.
             if (interactionCoroutine != null)

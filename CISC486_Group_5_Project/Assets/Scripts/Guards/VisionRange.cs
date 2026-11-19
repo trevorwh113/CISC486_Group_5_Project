@@ -77,13 +77,21 @@ public class VisionRange : MonoBehaviour
      */
     private bool isPlayerInLineOfSight()
     {
-        // Calculate the direction and distance to the player
-        Vector3 direction = (player.getCurrentPosition() - transform.position).normalized;
-        float distance = Vector3.Distance(player.getCurrentPosition(), transform.position);
+        Vector3 directionToPlayer = player.getCurrentPosition() - transform.position;
+        float distance = directionToPlayer.magnitude;
 
-        // Does the guard have unobstructed line of sight to the player?
-        bool obstacleInLineOfSight = Physics.Raycast(transform.position, direction, distance);
-        return !obstacleInLineOfSight;
+        bool hitSomething = Physics.Raycast(
+            transform.position,
+            directionToPlayer.normalized,
+            out RaycastHit hit,
+            distance,
+            Physics.DefaultRaycastLayers,
+            QueryTriggerInteraction.Ignore
+        );
+
+        return !hitSomething ||
+               hit.transform == player.transform ||
+               hit.transform.IsChildOf(player.transform);
     }
 
     /**

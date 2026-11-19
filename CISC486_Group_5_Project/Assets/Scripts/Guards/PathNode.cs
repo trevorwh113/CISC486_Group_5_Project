@@ -16,4 +16,9 @@ public class PathNode : MonoBehaviour
     {
         return transform.position;
     }
+
+    private void Awake()
+    {
+        GetComponentInChildren<MeshRenderer>().enabled = false;
+    }
 }
