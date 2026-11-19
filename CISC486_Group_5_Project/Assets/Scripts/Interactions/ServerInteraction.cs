@@ -35,9 +35,11 @@ public class ServerInteraction : MonoBehaviour
         if (playerTouching &&
             !hasGrantedPoint &&
             interactionCoroutine == null &&
+            Keyboard.current != null &&
             Keyboard.current.eKey.wasPressedThisFrame)
         {
-            interactionCoroutine = StartCoroutine(InteractionTimer());
+            if (!GameManager.Instance.IsFinalServer(this) || GameManager.Instance.FinalDoorUnlocked)
+                interactionCoroutine = StartCoroutine(InteractionTimer());
         }
     }
 
@@ -55,6 +57,9 @@ public class ServerInteraction : MonoBehaviour
 
         // Completing the timer consumes this server's point permanently.
         hasGrantedPoint = true;
+        //if the server is not final, generate password digit
+        if (!GameManager.Instance.IsFinalServer(this))
+            GameManager.Instance.CollectCodeDigit();
         ScoreManager.Instance.RegisterServerScored();
         interactionPrompt.SetActive(false);
         interactionCoroutine = null;
@@ -63,7 +68,7 @@ public class ServerInteraction : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         // The player's collider is on a child, so check its attached root Rigidbody.
-        if (other.attachedRigidbody.CompareTag("Player"))
+        if (other.attachedRigidbody != null && other.attachedRigidbody.CompareTag("Player"))
         {
             playerTouching = true;
 
@@ -77,7 +82,7 @@ public class ServerInteraction : MonoBehaviour
 
     private void OnTriggerExit(Collider other)
     {
-        if (other.attachedRigidbody.CompareTag("Player"))
+        if (other.attachedRigidbody != null && other.attachedRigidbody.CompareTag("Player"))
         {
             playerTouching = false;
             interactionPrompt.SetActive(false);
