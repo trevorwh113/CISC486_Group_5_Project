@@ -3,7 +3,7 @@ using UnityEngine.AI;
 
 /**
  * Implements chase behaviour when attached to a guard agent.
- * Must be enabled with start() and disabled with stopChase().
+ * Must be enabled with startChase() and disabled with stopChase().
  */
 public class Chase : MonoBehaviour
 {

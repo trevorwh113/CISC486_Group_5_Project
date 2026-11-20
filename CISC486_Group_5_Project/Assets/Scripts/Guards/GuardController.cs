@@ -49,8 +49,6 @@ public class GuardController : MonoBehaviour
     void Start()
     {
         // Detect when the player has been reached during chase
-        // TODO: Will cause issue if the player remaisn in the line of sight
-        // TODO: Could cause issue if the player is caught before pathforming occurs
         GameEvents.guardReachedPlayer.AddListener(playerCaught);
         // Begin permanent pursuit when the level objective is completed.
         GameEvents.allServersScored.AddListener(activateLockdown);
