@@ -1,8 +1,7 @@
 using UnityEngine;
 
 /**
- * Activates the level exit after every server is scored and displays the
- * victory screen when the player reaches that exit.
+ * Displays the victory screen when the player reaches the level exit.
  */
 public class LevelCompletionController : MonoBehaviour
 {
@@ -21,22 +20,12 @@ public class LevelCompletionController : MonoBehaviour
 
     private void OnEnable()
     {
-        GameEvents.allServersScored.AddListener(activateExit);
         GameEvents.playerWon.AddListener(showVictory);
     }
 
     private void OnDisable()
     {
-        GameEvents.allServersScored.RemoveListener(activateExit);
         GameEvents.playerWon.RemoveListener(showVictory);
-    }
-
-    /**
-     * Makes the escape destination available when lockdown begins.
-     */
-    private void activateExit()
-    {
-        exitObject.SetActive(true);
     }
 
     /**
