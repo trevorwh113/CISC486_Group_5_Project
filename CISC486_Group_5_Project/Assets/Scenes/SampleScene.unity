@@ -4413,13 +4413,33 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2057228576577634669, guid: b1973a977ec9d544ab0add8e720edd7f, type: 3}
+      propertyPath: speed
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2057228576577634669, guid: b1973a977ec9d544ab0add8e720edd7f, type: 3}
+      propertyPath: wanderRate
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 2057228576577634669, guid: b1973a977ec9d544ab0add8e720edd7f, type: 3}
+      propertyPath: seekDistance
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2057228576577634669, guid: b1973a977ec9d544ab0add8e720edd7f, type: 3}
+      propertyPath: wanderRadius
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 2057228576577634669, guid: b1973a977ec9d544ab0add8e720edd7f, type: 3}
+      propertyPath: stoppingDistance
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2682450611187177937, guid: b1973a977ec9d544ab0add8e720edd7f, type: 3}
       propertyPath: player
       value: 
       objectReference: {fileID: 2101818828}
     - target: {fileID: 4348541959711173513, guid: b1973a977ec9d544ab0add8e720edd7f, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 18.04
+      value: 8.3
       objectReference: {fileID: 0}
     - target: {fileID: 4348541959711173513, guid: b1973a977ec9d544ab0add8e720edd7f, type: 3}
       propertyPath: m_LocalPosition.y
@@ -4427,7 +4447,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4348541959711173513, guid: b1973a977ec9d544ab0add8e720edd7f, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -0.17344
+      value: -11
       objectReference: {fileID: 0}
     - target: {fileID: 4348541959711173513, guid: b1973a977ec9d544ab0add8e720edd7f, type: 3}
       propertyPath: m_LocalRotation.w

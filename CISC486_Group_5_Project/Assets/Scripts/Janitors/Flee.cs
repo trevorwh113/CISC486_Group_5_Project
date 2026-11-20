@@ -15,7 +15,7 @@ public class Flee : MonoBehaviour
     public PlayerMovement player;
 
     [Header("Movement")]
-    [Tooltip("The proportion of the based speed to increase while running from a target (range: 1+).")]
+    [Tooltip("The proportion of the base speed to increase while running from a target (range: 1+).")]
     public float fleeRate;
     [Tooltip("The duration in seconds after starting to flee until the agent becomes exhausted (range: >0).")]
     public float runDuration;

@@ -261,8 +261,8 @@ GameObject:
   - component: {fileID: 1151157210087193859}
   - component: {fileID: 6895917332184329051}
   - component: {fileID: 5417517795733571512}
+  - component: {fileID: 2057228576577634669}
   - component: {fileID: 2682450611187177937}
-  - component: {fileID: 7158571368865079855}
   - component: {fileID: 2196572669536080123}
   - component: {fileID: 6497445914210450578}
   m_Layer: 0
@@ -324,7 +324,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::JanitorController
   flee: {fileID: 5417517795733571512}
-  patrol: {fileID: 7158571368865079855}
+  wander: {fileID: 2057228576577634669}
   vision: {fileID: 2682450611187177937}
   player: {fileID: 0}
 --- !u!114 &5417517795733571512
@@ -345,6 +345,22 @@ MonoBehaviour:
   runDuration: 8
   recoveryDuration: 2
   stamina: 0.9
+--- !u!114 &2057228576577634669
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7669986368305154804}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 53124ccb993c8d940a17b6826a93e405, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Wander
+  navAgent: {fileID: 1151157210087193859}
+  wanderRadius: 3
+  stoppingDistance: 1
+  wanderRate: 0.5
 --- !u!114 &2682450611187177937
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -357,24 +373,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 27ad7334ddc977243b73741b3bf8ab2e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::VisionRange
-  visionRadius: 5
-  visionDistance: 10
+  visionRadius: 7
+  visionDistance: 8
   player: {fileID: 0}
---- !u!114 &7158571368865079855
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7669986368305154804}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e08ec9d8d6777254ca5f55901a62bbfe, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Pathfollowing
-  navAgent: {fileID: 1151157210087193859}
-  path: {fileID: 0}
-  stoppingDistance: 0
 --- !u!114 &2196572669536080123
 MonoBehaviour:
   m_ObjectHideFlags: 0
