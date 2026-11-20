@@ -8,7 +8,7 @@ using UnityEngine.InputSystem;
 public class KeyPickupInteraction : MonoBehaviour
 {
     [Header("Interaction Prompt")]
-    [Tooltip("The world-space Canvas displayed above the hiding spot.")]
+    [Tooltip("The world-space Canvas displayed above the janitor.")]
     [SerializeField] private GameObject interactionPrompt;
     [Tooltip("The text used to display the current interaction instruction.")]
     [SerializeField] private TMP_Text interactionPromptText;

@@ -53,4 +53,12 @@ public class KeyManager : MonoBehaviour
         // keyText.text = "Keys: " + allKeys;
         // TODO: Implement the graphical display of collected keys
     }
+
+    /**
+     * Allows other scripts to check if a key has been aquired by the player
+     */
+    public bool keyAquired(int key)
+    {
+        return allKeys.ContainsKey(key) && allKeys[key];
+    }
 }
