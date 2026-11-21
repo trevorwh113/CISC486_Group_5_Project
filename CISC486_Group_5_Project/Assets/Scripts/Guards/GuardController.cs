@@ -90,6 +90,7 @@ public class GuardController : MonoBehaviour
         // Disable active watching while chasing, as it is unecessary
         vision.stopWatching();
         chase.startChase();
+        MusicManager.Instance.playChaseMusic();
     }
 
     private void stopChasingAndResumePath()
@@ -99,6 +100,7 @@ public class GuardController : MonoBehaviour
         // Resume path following and watching out for the player
         vision.startWatching();
         patrol.resumeFollowingPath();
+        MusicManager.Instance.stopChaseMusic();
     }
 
     private void playerCaught()
@@ -125,6 +127,8 @@ public class GuardController : MonoBehaviour
         {
             startChasingAndStopWatching();
         }
+
+        MusicManager.Instance.playLockdownMusic();
     }
 
     private void respondToCameraAlert(Vector3 lastKnownPosition)

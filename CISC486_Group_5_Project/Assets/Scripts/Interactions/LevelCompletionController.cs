@@ -60,5 +60,6 @@ public class LevelCompletionController : MonoBehaviour
     {
         victoryPanel.SetActive(true);
         Time.timeScale = 0f;
+        MusicManager.Instance.playVictoryMusic();
     }
 }
