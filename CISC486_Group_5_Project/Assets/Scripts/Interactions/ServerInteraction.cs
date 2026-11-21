@@ -21,6 +21,10 @@ public class ServerInteraction : MonoBehaviour, IInteractable
     [Header("Sound Effects")]
     [Tooltip("The audio source component attached to this object.")]
     [SerializeField] private AudioSource audioSource;
+    [Tooltip("The sound clip to play after successfully stealing from a server.")]
+    [SerializeField] private AudioClip stealSuccess;
+    [Tooltip("The sound clip to play after failing to steal from a server.")]
+    [SerializeField] private AudioClip stealFail;
 
     /** Prevents this server instance from granting more than one point */
     private bool hasGrantedPoint;
@@ -80,6 +84,7 @@ public class ServerInteraction : MonoBehaviour, IInteractable
         interactionPrompt.SetActive(false);
         interactionCoroutine = null;
         audioSource.Stop();
+        audioSource.PlayOneShot(stealSuccess);
     }
 
     private void OnTriggerEnter(Collider other)
@@ -107,6 +112,7 @@ public class ServerInteraction : MonoBehaviour, IInteractable
                 StopCoroutine(interactionCoroutine);
                 interactionCoroutine = null;
                 audioSource.Stop();
+                audioSource.PlayOneShot(stealFail);
             }
         }
     }
