@@ -21,7 +21,7 @@ public class HidingSpotInteraction : MonoBehaviour, IInteractable
     [Tooltip("The audio source component attached to this object.")]
     [SerializeField] private AudioSource audioSource;
     [Tooltip("The sound clip to play when entering or existing a box.")]
-    [SerializeField] private AudioClip woosh;
+    [SerializeField] private AudioClip wooshSound;
 
     /** The player currently inside the interaction trigger */
     private PlayerMovement player;
@@ -53,7 +53,7 @@ public class HidingSpotInteraction : MonoBehaviour, IInteractable
                 interactionPrompt.SetActive(false);
                 player = null;
                 playerInteraction = null;
-                audioSource.PlayOneShot(woosh);
+                audioSource.PlayOneShot(wooshSound);
             }
 
             return;
@@ -89,7 +89,7 @@ public class HidingSpotInteraction : MonoBehaviour, IInteractable
         interactionPromptText.text = "Move to exit";
         player = interactingPlayer;
         player.Hide(exitPoint.position);
-        audioSource.PlayOneShot(woosh);
+        audioSource.PlayOneShot(wooshSound);
     }
 
     private void OnTriggerEnter(Collider other)
