@@ -134,6 +134,8 @@ MonoBehaviour:
   interactionPromptText: {fileID: 7181835256191782557}
   serverLight: {fileID: 4751498285142980170}
   audioSource: {fileID: 346283003417586885}
+  stealSuccess: {fileID: 8300000, guid: b56eaec4b4c64aa42a47e7f9cc7fadf5, type: 3}
+  stealFail: {fileID: 8300000, guid: aa0e24acbeff1034babaf8a17c161f30, type: 3}
 --- !u!65 &-5318246617762848270
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -168,7 +170,7 @@ AudioSource:
   m_audioClip: {fileID: 0}
   m_Resource: {fileID: 8300000, guid: be75097a49ed97545ad8f3f197fa915c, type: 3}
   m_PlayOnAwake: 0
-  m_Volume: 0.635
+  m_Volume: 0.761
   m_Pitch: 1
   Loop: 1
   Mute: 0
