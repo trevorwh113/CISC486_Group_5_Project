@@ -438,7 +438,7 @@ MonoBehaviour:
   interactionPrompt: {fileID: 5383121789763686822}
   interactionPromptText: {fileID: 2821245917574682038}
   audioSource: {fileID: 1392577681619259998}
-  woosh: {fileID: 8300000, guid: 301d229bb64f74378bafcc36f8049e1f, type: 3}
+  wooshSound: {fileID: 8300000, guid: 301d229bb64f74378bafcc36f8049e1f, type: 3}
 --- !u!82 &1392577681619259998
 AudioSource:
   m_ObjectHideFlags: 0
@@ -452,7 +452,7 @@ AudioSource:
   m_audioClip: {fileID: 0}
   m_Resource: {fileID: 0}
   m_PlayOnAwake: 0
-  m_Volume: 0.402
+  m_Volume: 0.396
   m_Pitch: 1
   Loop: 0
   Mute: 0
