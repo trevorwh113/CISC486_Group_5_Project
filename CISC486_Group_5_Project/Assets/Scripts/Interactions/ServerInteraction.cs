@@ -14,6 +14,8 @@ public class ServerInteraction : MonoBehaviour, IInteractable
     [SerializeField] private GameObject interactionPrompt;
     [Tooltip("The text used for the interaction instruction and countdown.")]
     [SerializeField] private TMP_Text interactionPromptText;
+    [Tooltip("The light turned off after this server is scored.")]
+    [SerializeField] private Light serverLight;
 
     /** Prevents this server instance from granting more than one point */
     private bool hasGrantedPoint;
@@ -69,6 +71,7 @@ public class ServerInteraction : MonoBehaviour, IInteractable
         if (!GameManager.Instance.IsFinalServer(this))
             GameManager.Instance.CollectCodeDigit();
         ScoreManager.Instance.RegisterServerScored();
+        serverLight.enabled = false;
         interactionPrompt.SetActive(false);
         interactionCoroutine = null;
     }

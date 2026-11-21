@@ -15,7 +15,18 @@ public class LevelCompletionController : MonoBehaviour
     {
         // Reset the level state whenever this scene is loaded.
         Time.timeScale = 1f;
-        exitObject.SetActive(false);
+        exitObject.SetActive(true);
+
+        foreach (MeshRenderer meshRenderer in exitObject.GetComponentsInChildren<MeshRenderer>())
+        {
+            meshRenderer.enabled = false;
+        }
+
+        foreach (Collider exitCollider in exitObject.GetComponentsInChildren<Collider>())
+        {
+            exitCollider.enabled = false;
+        }
+
         victoryPanel.SetActive(false);
     }
 
@@ -32,11 +43,14 @@ public class LevelCompletionController : MonoBehaviour
     }
 
     /**
-     * Makes the escape destination available when lockdown begins.
+     * Enables the exit trigger without displaying its mesh.
      */
     private void activateExit()
     {
-        exitObject.SetActive(true);
+        foreach (Collider exitCollider in exitObject.GetComponentsInChildren<Collider>())
+        {
+            exitCollider.enabled = true;
+        }
     }
 
     /**
