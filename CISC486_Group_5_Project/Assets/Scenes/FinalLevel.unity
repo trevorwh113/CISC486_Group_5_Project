@@ -702,6 +702,10 @@ PrefabInstance:
       value: 47.84223
       objectReference: {fileID: 0}
     - target: {fileID: 6343194965980226651, guid: 029193907fff16942960c5fe258fc1de, type: 3}
+      propertyPath: player
+      value: 
+      objectReference: {fileID: 683242567}
+    - target: {fileID: 6343194965980226651, guid: 029193907fff16942960c5fe258fc1de, type: 3}
       propertyPath: viewAngle
       value: 50
       objectReference: {fileID: 0}
@@ -713,6 +717,10 @@ PrefabInstance:
       propertyPath: viewDistance
       value: 15.5
       objectReference: {fileID: 0}
+    - target: {fileID: 6343194965980226651, guid: 029193907fff16942960c5fe258fc1de, type: 3}
+      propertyPath: playerCollider
+      value: 
+      objectReference: {fileID: 582664887}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -12794,6 +12802,14 @@ PrefabInstance:
       propertyPath: m_InnerSpotAngle
       value: 36
       objectReference: {fileID: 0}
+    - target: {fileID: 6343194965980226651, guid: 029193907fff16942960c5fe258fc1de, type: 3}
+      propertyPath: player
+      value: 
+      objectReference: {fileID: 683242567}
+    - target: {fileID: 6343194965980226651, guid: 029193907fff16942960c5fe258fc1de, type: 3}
+      propertyPath: playerCollider
+      value: 
+      objectReference: {fileID: 582664887}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
