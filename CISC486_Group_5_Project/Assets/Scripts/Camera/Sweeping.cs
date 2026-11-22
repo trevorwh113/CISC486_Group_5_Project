@@ -11,6 +11,12 @@ public class Sweeping : MonoBehaviour
     public Transform player;
     public Collider playerCollider;
 
+    [Tooltip("Optional point where detection starts. Assign a child transform, or leave empty and use Detection Offset.")]
+    public Transform detectionOrigin;
+
+    [Tooltip("Local-space offset for the detection cone when no Detection Origin is assigned.")]
+    public Vector3 detectionOffset = new Vector3(0f, 0f, 0.5f);
+
     [Min(0f)]
     public float viewDistance = 15f;
 
@@ -237,7 +243,8 @@ public class Sweeping : MonoBehaviour
         // Aim toward center of player's collision box
         Vector3 target = playerCollider.bounds.center;
 
-        Vector3 direction = target - transform.position;
+        Vector3 origin = GetDetectionOrigin();
+        Vector3 direction = target - origin;
         float distance = direction.magnitude;
 
         // Check Range
@@ -261,7 +268,7 @@ public class Sweeping : MonoBehaviour
 
         // Check line of sight
         if (Physics.Raycast(
-            transform.position,
+            origin,
             direction.normalized,
             out RaycastHit hit,
             distance,
@@ -286,6 +293,14 @@ public class Sweeping : MonoBehaviour
         return false;
     }
 
+    Vector3 GetDetectionOrigin()
+    {
+        if (detectionOrigin != null)
+            return detectionOrigin.position;
+
+        return transform.TransformPoint(detectionOffset);
+    }
+
     // Draw detection cone in Unity Scene view
     void OnDrawGizmos()
     {
@@ -297,7 +312,7 @@ public class Sweeping : MonoBehaviour
             ? detectedColor
             : coneColor;
 
-        Vector3 origin = transform.position;
+        Vector3 origin = GetDetectionOrigin();
         Vector3 forward = transform.forward;
 
         float halfAngle = viewAngle / 2f;
