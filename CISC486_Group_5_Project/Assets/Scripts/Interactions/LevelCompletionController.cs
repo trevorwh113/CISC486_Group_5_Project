@@ -14,7 +14,7 @@ public class LevelCompletionController : MonoBehaviour
     private void Awake()
     {
         // Reset the level state whenever this scene is loaded.
-        Time.timeScale = 1f;
+        // Time.timeScale = 1f;
         exitObject.SetActive(true);
 
         foreach (MeshRenderer meshRenderer in exitObject.GetComponentsInChildren<MeshRenderer>())

@@ -4,9 +4,16 @@ using UnityEngine.SceneManagement;
 
 public class PauseMenu : MonoBehaviour
 {
+    [Header("UI Canvas")]
     [SerializeField] private GameObject pausePanel;
     [SerializeField] private string mainMenuScene = "MainMenu";
 
+    [Header("Sound Effects")]
+    [Tooltip("The audio source component attached to this object.")]
+    [SerializeField] private AudioSource audioSource;
+
+    [Tooltip("The audio clip to play when pausing or unpausing the menu.")]
+    [SerializeField] private AudioClip sound;
     private bool isPaused;
 
     private void Start()
@@ -33,6 +40,7 @@ public class PauseMenu : MonoBehaviour
     {
         isPaused = true;
         pausePanel.SetActive(true);
+        audioSource.PlayOneShot(sound);
         Time.timeScale = 0f;
     }
 
@@ -40,6 +48,7 @@ public class PauseMenu : MonoBehaviour
     {
         isPaused = false;
         pausePanel.SetActive(false);
+        audioSource.PlayOneShot(sound);
         Time.timeScale = 1f;
     }
 
