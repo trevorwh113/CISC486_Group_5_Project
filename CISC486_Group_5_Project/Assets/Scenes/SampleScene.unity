@@ -995,7 +995,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2389179221335417156, guid: 361d0f1fd2935c5428db7326053b81de, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5142635912970895493, guid: 361d0f1fd2935c5428db7326053b81de, type: 3}
       propertyPath: player
@@ -4453,6 +4453,14 @@ PrefabInstance:
       propertyPath: player
       value: 
       objectReference: {fileID: 2101818828}
+    - target: {fileID: 3291837689609823565, guid: b1973a977ec9d544ab0add8e720edd7f, type: 3}
+      propertyPath: m_Mesh
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 3291837690005351781, guid: b1973a977ec9d544ab0add8e720edd7f, type: 3}
+      propertyPath: m_Mesh
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 4348541959711173513, guid: b1973a977ec9d544ab0add8e720edd7f, type: 3}
       propertyPath: m_LocalPosition.x
       value: 8.3
@@ -4645,7 +4653,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2389179221335417156, guid: 361d0f1fd2935c5428db7326053b81de, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3170440598832666071, guid: 361d0f1fd2935c5428db7326053b81de, type: 3}
       propertyPath: m_Radius
