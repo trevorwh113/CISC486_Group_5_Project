@@ -43,7 +43,7 @@ Light:
   m_Enabled: 1
   serializedVersion: 13
   m_Type: 0
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 1, g: 0.53091836, b: 0.53091836, a: 1}
   m_Intensity: 50
   m_Range: 20
   m_SpotAngle: 36
@@ -56,7 +56,7 @@ Light:
     m_Strength: 1
     m_Bias: 0.01
     m_NormalBias: 0.1
-    m_NearPlane: 0.05
+    m_NearPlane: 0.1
     m_CullingMatrixOverride:
       e00: 1
       e01: 0
@@ -267,3 +267,7 @@ MonoBehaviour:
   coneSegments: 32
   isPlayerDetected: 0
   flashlight: {fileID: 2565725072884397508}
+  trackingSpeed: 120
+  loseTargetDelay: 1
+  returnToSweepSpeed: 180
+  alertInterval: 3
