@@ -33,8 +33,9 @@ public class HidingSpotInteraction : MonoBehaviour, IInteractable
     private bool waitingForExit;
 
     public Transform InteractionTransform => transform;
-    public bool CanInteract => !waitingForExit;
+    public bool CanInteract => playerInRange && !waitingForExit;
     public bool IsInteracting => waitingForExit;
+    public int InteractionPriority => 0;
 
     private void Awake()
     {

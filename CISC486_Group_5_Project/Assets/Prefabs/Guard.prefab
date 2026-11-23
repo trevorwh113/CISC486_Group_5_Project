@@ -601,7 +601,7 @@ MonoBehaviour:
   navAgent: {fileID: 3170440598832666071}
   player: {fileID: 0}
   chaseRate: 2
-  stoppingDistance: 0.5
+  stoppingDistance: 1.5
 --- !u!114 &9147758357187541034
 MonoBehaviour:
   m_ObjectHideFlags: 0

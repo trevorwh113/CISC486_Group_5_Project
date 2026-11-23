@@ -36,6 +36,7 @@ public class ServerInteraction : MonoBehaviour, IInteractable
     public Transform InteractionTransform => transform;
     public bool CanInteract => !hasGrantedPoint;
     public bool IsInteracting => interactionCoroutine != null;
+    public int InteractionPriority => 1;
 
     private void Awake()
     {
