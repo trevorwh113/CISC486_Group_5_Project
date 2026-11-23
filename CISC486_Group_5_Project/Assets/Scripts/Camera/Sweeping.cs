@@ -53,6 +53,10 @@ public class Sweeping : MonoBehaviour
     public float alertInterval = 3f;
     private float nextAlertTime;
 
+    [Header("Sound Effects")]
+    [Tooltip("The audio source component attached to this object.")]
+    [SerializeField] private AudioSource audioSource;
+
     void Start()
     {
         initialRotation = transform.localEulerAngles;
@@ -102,12 +106,14 @@ public class Sweeping : MonoBehaviour
         if (detected && Time.time >= nextAlertTime)
         {
             GameEvents.cameraSpottedPlayer.Invoke(lastKnownPlayerPosition);
+            audioSource.Play();
             nextAlertTime = Time.time + Mathf.Max(0.1f, alertInterval);
         }
 
         if (!detected && isPlayerDetected)
         {
             Debug.Log("Player lost!");
+            audioSource.Stop();
             // Reset alert time if player leaves and re-enters view
             nextAlertTime = Time.time;
         }
