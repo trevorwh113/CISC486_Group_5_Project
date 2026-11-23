@@ -52,6 +52,7 @@ MonoBehaviour:
   chaseSource: {fileID: 4278755942973632991}
   lockdownSource: {fileID: 3220531067804146355}
   victorySource: {fileID: 6831513325230259491}
+  victorySting: {fileID: 8300000, guid: 438081abb352bf14fb2b144b1f602b84, type: 3}
   fadeTime: 1
 --- !u!82 &9624430765736678
 AudioSource:
@@ -355,9 +356,9 @@ AudioSource:
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 0}
-  m_Resource: {fileID: 0}
+  m_Resource: {fileID: 8300000, guid: 4cb1cedef0c7ff146a3173d6e0c8f1db, type: 3}
   m_PlayOnAwake: 0
-  m_Volume: 1
+  m_Volume: 0.655
   m_Pitch: 1
   Loop: 1
   Mute: 0

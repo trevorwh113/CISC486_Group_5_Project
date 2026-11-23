@@ -24,6 +24,8 @@ public class MusicManager : MonoBehaviour
     [Header("Victory Music")]
     [Tooltip("The audio component corresponding to the win screen music.")]
     [SerializeField] private AudioSource victorySource;
+    [Tooltip("The audio sting that plays immediately when winning.")]
+    [SerializeField] private AudioClip victorySting;
 
     [Header("Transitions")]
     [Tooltip("Fade in an out durations in seconds.")]
@@ -120,6 +122,8 @@ public class MusicManager : MonoBehaviour
         StopAllCoroutines();
         defaultSource.Stop();
         lockdownSource.Stop();
+
+        victorySource.PlayOneShot(victorySting);
         victorySource.Play();
     }
 
