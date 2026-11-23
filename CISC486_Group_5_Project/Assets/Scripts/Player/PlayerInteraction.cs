@@ -70,6 +70,7 @@ public class PlayerInteraction : MonoBehaviour
     {
         IInteractable closest = null;
         float closestDistance = float.MaxValue;
+        int closestPriority = int.MinValue;
 
         foreach (IInteractable interactable in nearbyInteractables)
         {
@@ -78,14 +79,17 @@ public class PlayerInteraction : MonoBehaviour
                 continue;
             }
 
+            int priority = interactable.InteractionPriority;
             float distance = Vector3.SqrMagnitude(
                 transform.position - interactable.InteractionTransform.position
             );
 
-            if (distance < closestDistance)
+            if (priority > closestPriority ||
+                (priority == closestPriority && distance < closestDistance))
             {
                 closest = interactable;
                 closestDistance = distance;
+                closestPriority = priority;
             }
         }
 
