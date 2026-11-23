@@ -17,6 +17,12 @@ public class KeyPickupInteraction : MonoBehaviour
     [Tooltip("The integer denoting this key. Unlocks doors with matching key IDs.")]
     public int keyId;
 
+    [Header("Sound Effects")]
+    [Tooltip("The audio source component attached to this object.")]
+    [SerializeField] private AudioSource audioSource;
+    [Tooltip("The sound clip to play when successfully stealing the key.")]
+    [SerializeField] private AudioClip stealingSound;
+
     /** Whether the player is close enough to use this hiding spot */
     private bool playerInRange = false;
 
@@ -37,6 +43,7 @@ public class KeyPickupInteraction : MonoBehaviour
             // Mark the key as taken
             keyTaken = true;
             KeyManager.Instance.PickUpKey(keyId);
+            audioSource.PlayOneShot(stealingSound);
 
             // Hide the prompt
             interactionPrompt.SetActive(false);
