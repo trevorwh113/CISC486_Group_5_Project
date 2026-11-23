@@ -6,6 +6,7 @@ using UnityEngine.UI;
 /** Keeps the code beside the score and draws the door keypad on an overlay. */
 public class DoorCodeUI : MonoBehaviour
 {
+    [Header("Visual Display")]
     [Tooltip("Password text saved under GameUI so its position can be edited in the prefab.")]
     [SerializeField] private TMP_Text codeText;
     private GameObject uiRoot;
@@ -13,6 +14,12 @@ public class DoorCodeUI : MonoBehaviour
     private TMP_Text enteredText;
     private TMP_Text messageText;
     private TMP_Text doorPrompt;
+
+    [Header("Sound Effects")]
+    [Tooltip("The audio source component attached to this object.")]
+    [SerializeField] private AudioSource audioSource;
+    [Tooltip("The sound when the player presses a key or enters a digit.")]
+    [SerializeField] private AudioClip pressKeySound;
 
     private void OnEnable()
     {
@@ -71,28 +78,28 @@ public class DoorCodeUI : MonoBehaviour
 
         // number buttons
         Button(keypad, "1", font, new Vector2(-90, 30),
-            new Vector2(78, 46), () => appendDigit(1));
+            new Vector2(78, 46), () => appendDigit(1), audioSource, pressKeySound);
         Button(keypad, "2", font, new Vector2(0, 30),
-            new Vector2(78, 46), () => appendDigit(2));
+            new Vector2(78, 46), () => appendDigit(2), audioSource, pressKeySound);
         Button(keypad, "3", font, new Vector2(90, 30),
-            new Vector2(78, 46), () => appendDigit(3));
+            new Vector2(78, 46), () => appendDigit(3), audioSource, pressKeySound);
         Button(keypad, "4", font, new Vector2(-90, -26),
-            new Vector2(78, 46), () => appendDigit(4));
+            new Vector2(78, 46), () => appendDigit(4), audioSource, pressKeySound);
         Button(keypad, "5", font, new Vector2(0, -26),
-            new Vector2(78, 46), () => appendDigit(5));
+            new Vector2(78, 46), () => appendDigit(5), audioSource, pressKeySound);
         Button(keypad, "6", font, new Vector2(90, -26),
-            new Vector2(78, 46), () => appendDigit(6));
+            new Vector2(78, 46), () => appendDigit(6), audioSource, pressKeySound);
         Button(keypad, "7", font, new Vector2(-90, -82),
-            new Vector2(78, 46), () => appendDigit(7));
+            new Vector2(78, 46), () => appendDigit(7), audioSource, pressKeySound);
         Button(keypad, "8", font, new Vector2(0, -82),
-            new Vector2(78, 46), () => appendDigit(8));
+            new Vector2(78, 46), () => appendDigit(8), audioSource, pressKeySound);
         Button(keypad, "9", font, new Vector2(90, -82),
-            new Vector2(78, 46), () => appendDigit(9));
+            new Vector2(78, 46), () => appendDigit(9), audioSource, pressKeySound);
         // bottom row buttons
-        Button(keypad, "Clear", font, new Vector2(-90, -138), new Vector2(78, 46), clear);
-        Button(keypad, "0", font, new Vector2(0, -138), new Vector2(78, 46), () => appendDigit(0));
-        Button(keypad, "Enter", font, new Vector2(90, -138), new Vector2(78, 46), submit);
-        Button(keypad, "Close", font, new Vector2(0, -188), new Vector2(110, 34), close);
+        Button(keypad, "Clear", font, new Vector2(-90, -138), new Vector2(78, 46), clear, audioSource, pressKeySound);
+        Button(keypad, "0", font, new Vector2(0, -138), new Vector2(78, 46), () => appendDigit(0), audioSource, pressKeySound);
+        Button(keypad, "Enter", font, new Vector2(90, -138), new Vector2(78, 46), submit, audioSource, pressKeySound);
+        Button(keypad, "Close", font, new Vector2(0, -188), new Vector2(110, 34), close, audioSource, pressKeySound);
         keypadPanel.SetActive(false);
     }
 
@@ -145,7 +152,7 @@ public class DoorCodeUI : MonoBehaviour
     }
 
     private static void Button(Transform parent, string label, TMP_FontAsset font,
-        Vector2 position, Vector2 size, Action action)
+        Vector2 position, Vector2 size, Action action, AudioSource audioSource, AudioClip sound)
     {
         RectTransform rect = Panel(parent, label, new Vector2(0.5f, 0.5f), position,
             size, new Color(0.2f, 0.34f, 0.43f, 1f));
@@ -154,6 +161,7 @@ public class DoorCodeUI : MonoBehaviour
         UnityEngine.UI.Button button = rect.gameObject.AddComponent<UnityEngine.UI.Button>();
         button.targetGraphic = image;
         button.onClick.AddListener(() => action());
+        button.onClick.AddListener(() => PlaySound(audioSource, sound));
         TMP_Text caption = Text(rect, "Label", font, 22);
         Stretch(caption.rectTransform);
         caption.text = label;
@@ -172,5 +180,10 @@ public class DoorCodeUI : MonoBehaviour
         rect.anchorMax = Vector2.one;
         rect.offsetMin = Vector2.zero;
         rect.offsetMax = Vector2.zero;
+    }
+
+    private static void PlaySound(AudioSource source, AudioClip sound)
+    {
+        source.PlayOneShot(sound);
     }
 }

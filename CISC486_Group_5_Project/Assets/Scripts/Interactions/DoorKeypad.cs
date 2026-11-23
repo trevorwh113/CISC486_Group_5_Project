@@ -13,6 +13,20 @@ public class DoorKeypad : MonoBehaviour
     [Tooltip("Object to hide when unlocked. Leave empty to hide this door object.")]
     [SerializeField] private GameObject doorToOpen;
 
+    [Header("Sound Effects")]
+    [Tooltip("The audio source component attached to this object.")]
+    [SerializeField] private AudioSource audioSource;
+    [Tooltip("The sound when the player opens or closes the keypad.")]
+    [SerializeField] private AudioClip openCloseKeypadSound;
+    [Tooltip("The sound when the player submits the correct code to open the door.")]
+    [SerializeField] private AudioClip correctCodeSound;
+    [Tooltip("The sound when the player submits the wrong code to open the door.")]
+    [SerializeField] private AudioClip incorrectCodeSound;
+    [Tooltip("The sound when the door opens.")]
+    [SerializeField] private AudioClip doorOpensSound;
+    [Tooltip("The sound when the player presses a key or enters a digit.")]
+    [SerializeField] private AudioClip pressKeySound;
+
     private Transform player;
     private bool playerInRange;
     private bool keypadOpen;
@@ -81,8 +95,11 @@ public class DoorKeypad : MonoBehaviour
         }
 
         if (Keyboard.current.backspaceKey.wasPressedThisFrame && enteredCode.Length > 0)
+        {
             enteredCode = enteredCode.Substring(0, enteredCode.Length - 1);
-
+            audioSource.PlayOneShot(pressKeySound);            
+        }
+        
         if (Keyboard.current.enterKey.wasPressedThisFrame || Keyboard.current.numpadEnterKey.wasPressedThisFrame)
             SubmitCode();
 
@@ -91,7 +108,10 @@ public class DoorKeypad : MonoBehaviour
             if ((Keyboard.current[DigitKeys[digit]].wasPressedThisFrame ||
                  Keyboard.current[NumpadKeys[digit]].wasPressedThisFrame) &&
                 enteredCode.Length < GameManager.Instance.CodeLength)
+            {
                 enteredCode += digit;
+                audioSource.PlayOneShot(pressKeySound);                
+            }
         }
         RefreshKeypadUI();
     }
@@ -105,23 +125,27 @@ public class DoorKeypad : MonoBehaviour
         keypadMessage = "";
         keypadOpen = true;
         RefreshKeypadUI();
+        audioSource.PlayOneShot(openCloseKeypadSound);
     }
 
     private void CloseKeypad()
     {
         keypadOpen = false;
         RefreshKeypadUI();
+        audioSource.PlayOneShot(openCloseKeypadSound);
     }
 
     private void SubmitCode()
     {
         if (GameManager.Instance.TryUnlockFinalDoor(enteredCode))
         {
+            audioSource.PlayOneShot(correctCodeSound);
             CloseKeypad();
             OpenDoor();
             return;
         }
 
+        audioSource.PlayOneShot(incorrectCodeSound);
         keypadMessage = GameManager.Instance.AllCodeDigitsCollected ? "Incorrect code" : "Find the remaining servers";
         enteredCode = "";
         RefreshKeypadUI();
@@ -151,6 +175,7 @@ public class DoorKeypad : MonoBehaviour
 
     private void OpenDoor()
     {
+        audioSource.PlayOneShot(doorOpensSound);
         GameObject target = doorToOpen != null ? doorToOpen : gameObject;
         target.SetActive(false);
     }
