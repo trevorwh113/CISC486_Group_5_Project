@@ -8,14 +8,25 @@ using UnityEngine;
  */
 public class ServerInteraction : MonoBehaviour, IInteractable
 {
+    [Header("Countdown")]
     [Tooltip("How long the player must remain in range to complete the interaction.")]
     [SerializeField] private float interactionDuration = 1f;
+
+    [Header("HUD")]
     [Tooltip("The world-space Canvas displayed above the server.")]
     [SerializeField] private GameObject interactionPrompt;
     [Tooltip("The text used for the interaction instruction and countdown.")]
     [SerializeField] private TMP_Text interactionPromptText;
     [Tooltip("The light turned off after this server is scored.")]
     [SerializeField] private Light serverLight;
+
+    [Header("Sound Effects")]
+    [Tooltip("The audio source component attached to this object.")]
+    [SerializeField] private AudioSource audioSource;
+    [Tooltip("The sound clip to play after successfully stealing from a server.")]
+    [SerializeField] private AudioClip stealSuccess;
+    [Tooltip("The sound clip to play after failing to steal from a server.")]
+    [SerializeField] private AudioClip stealFail;
 
     /** Prevents this server instance from granting more than one point */
     private bool hasGrantedPoint;
@@ -57,6 +68,7 @@ public class ServerInteraction : MonoBehaviour, IInteractable
     {
         // Display the remaining interaction time once per frame.
         float remainingTime = interactionDuration;
+        audioSource.Play();
 
         while (remainingTime > 0f)
         {
@@ -74,6 +86,8 @@ public class ServerInteraction : MonoBehaviour, IInteractable
         serverLight.enabled = false;
         interactionPrompt.SetActive(false);
         interactionCoroutine = null;
+        audioSource.Stop();
+        audioSource.PlayOneShot(stealSuccess);
     }
 
     private void OnTriggerEnter(Collider other)
@@ -100,6 +114,8 @@ public class ServerInteraction : MonoBehaviour, IInteractable
             {
                 StopCoroutine(interactionCoroutine);
                 interactionCoroutine = null;
+                audioSource.Stop();
+                audioSource.PlayOneShot(stealFail);
             }
         }
     }

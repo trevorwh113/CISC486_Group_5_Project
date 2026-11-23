@@ -7,12 +7,21 @@ using UnityEngine;
  */
 public class HidingSpotInteraction : MonoBehaviour, IInteractable
 {
+    [Header("Exit Point")]
     [Tooltip("The position where the player will reappear after leaving the hiding spot.")]
     [SerializeField] private Transform exitPoint;
+
+    [Header("HUD")]
     [Tooltip("The world-space Canvas displayed above the hiding spot.")]
     [SerializeField] private GameObject interactionPrompt;
     [Tooltip("The text used to display the current interaction instruction.")]
     [SerializeField] private TMP_Text interactionPromptText;
+
+    [Header("Sound Effects")]
+    [Tooltip("The audio source component attached to this object.")]
+    [SerializeField] private AudioSource audioSource;
+    [Tooltip("The sound clip to play when entering or existing a box.")]
+    [SerializeField] private AudioClip wooshSound;
 
     /** The player currently inside the interaction trigger */
     private PlayerMovement player;
@@ -44,6 +53,7 @@ public class HidingSpotInteraction : MonoBehaviour, IInteractable
                 interactionPrompt.SetActive(false);
                 player = null;
                 playerInteraction = null;
+                audioSource.PlayOneShot(wooshSound);
             }
 
             return;
@@ -79,6 +89,7 @@ public class HidingSpotInteraction : MonoBehaviour, IInteractable
         interactionPromptText.text = "Move to exit";
         player = interactingPlayer;
         player.Hide(exitPoint.position);
+        audioSource.PlayOneShot(wooshSound);
     }
 
     private void OnTriggerEnter(Collider other)

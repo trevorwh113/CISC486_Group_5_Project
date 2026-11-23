@@ -24,6 +24,16 @@ public class KeyDoorInteraction : MonoBehaviour
     [Tooltip("The rigidbody used to animate the door opening.")]
     public Rigidbody rigidbody;
 
+    [Header("Sound Effects")]
+    [Tooltip("The audio source component attached to this object.")]
+    [SerializeField] private AudioSource audioSource;
+    [Tooltip("The sound clip to play when unlocking a door succeeds.")]
+    [SerializeField] private AudioClip unlockSuccess;
+    [Tooltip("The sound clip to play when unlocking a door succeeds fails.")]
+    [SerializeField] private AudioClip unlockFail;
+    [Tooltip("The sound clip to play when opening a door.")]
+    [SerializeField] private AudioClip doorOpens;
+
     /** Whether the player is close enough to use this hiding spot */
     private bool playerInRange = false;
 
@@ -42,15 +52,21 @@ public class KeyDoorInteraction : MonoBehaviour
     private void Update()
     {
         // The player opens a door when nearby, holding the key, and pressing E
-        if (!unlocked && 
-            playerInRange && 
-            keyAquired &&
-            Keyboard.current.eKey.wasPressedThisFrame)
+        if (!unlocked && playerInRange && Keyboard.current.eKey.wasPressedThisFrame)
         {
-            // Mark the door as unlcoked and open it
-            unlocked = true;
-            interactionPrompt.SetActive(false);
-            StartCoroutine("openDoor");
+            if (keyAquired)
+            {
+                // Mark the door as unlcoked and open it
+                unlocked = true;
+                interactionPrompt.SetActive(false);
+                audioSource.PlayOneShot(unlockSuccess);
+                audioSource.PlayOneShot(doorOpens);
+                StartCoroutine("openDoor");
+            }
+            else
+            {
+                audioSource.PlayOneShot(unlockFail);
+            }
         }
     }
 

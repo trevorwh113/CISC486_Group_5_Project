@@ -14,7 +14,7 @@ public class LevelCompletionController : MonoBehaviour
     private void Awake()
     {
         // Reset the level state whenever this scene is loaded.
-        Time.timeScale = 1f;
+        // Time.timeScale = 1f;
         exitObject.SetActive(true);
 
         foreach (MeshRenderer meshRenderer in exitObject.GetComponentsInChildren<MeshRenderer>())
@@ -60,5 +60,6 @@ public class LevelCompletionController : MonoBehaviour
     {
         victoryPanel.SetActive(true);
         Time.timeScale = 0f;
+        MusicManager.Instance.playVictoryMusic();
     }
 }
