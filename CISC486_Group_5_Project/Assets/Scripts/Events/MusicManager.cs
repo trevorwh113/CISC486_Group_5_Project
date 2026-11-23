@@ -36,11 +36,12 @@ public class MusicManager : MonoBehaviour
     bool isLockdown = false;
 
     /**
-     * Indicates whether any guard has begun chasing, to avoid
+     * Indicates how many guards are chasing the player, to avoid
      * playing the chase sound multiple times if multiple guards
-     * are alerted.
+     * are alerted and to avoid it stopping prematurely if one guard
+     * looses interest.
      */
-    bool isChasing = false;
+    int numChasing = 0;
 
     /**
      * Caches the max valumes for each audio source as set in the editor,
@@ -71,9 +72,9 @@ public class MusicManager : MonoBehaviour
      */ 
     public void playChaseMusic()
     {
-        if (!isChasing && !isLockdown)
+        numChasing++;
+        if (numChasing == 1 && !isLockdown)
         {
-            isChasing = true;
             StopAllCoroutines();
             StartCoroutine(fadeMusicOut(defaultSource, "default", true));
             StartCoroutine(fadeMusicIn(chaseSource, "chase"));
@@ -85,9 +86,10 @@ public class MusicManager : MonoBehaviour
      */
     public void stopChaseMusic()
     {
-        if (isChasing && !isLockdown)
+        numChasing--;
+        if (numChasing <= 0)
         {
-            isChasing = false;
+            numChasing = 0;
             StopAllCoroutines();
             StartCoroutine(fadeMusicOut(chaseSource, "chase"));
             StartCoroutine(fadeMusicIn(defaultSource, "default", true));
@@ -103,10 +105,8 @@ public class MusicManager : MonoBehaviour
         if (!isLockdown)
         {
             isLockdown = true;
-            StopAllCoroutines();
-            defaultSource.Stop();
-            chaseSource.Stop();
-            lockdownSource.Play();
+            stopChaseMusic();
+            StartCoroutine(fadeMusicIn(lockdownSource, "lockdown"));
         }
     }
 
