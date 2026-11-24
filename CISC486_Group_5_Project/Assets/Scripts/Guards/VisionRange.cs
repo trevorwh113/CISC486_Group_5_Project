@@ -43,8 +43,6 @@ public class VisionRange : MonoBehaviour
         Vector3 pointB = furthestPoint + transform.TransformDirection(Vector3.left) * visionRadius;
         Vector3 pointC = furthestPoint + transform.TransformDirection(Vector3.right) * visionRadius;
 
-        debugDrawTriangle(pointA, pointB, pointC);
-
         // Get vectors A->B, A->C and A->Player
         Vector3 sideAB = pointB - pointA;
         Vector3 sideAC = pointC - pointA;

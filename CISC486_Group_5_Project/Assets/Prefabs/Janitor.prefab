@@ -376,7 +376,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 27ad7334ddc977243b73741b3bf8ab2e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::VisionRange
-  visionRadius: 7
+  visionRadius: 12
   visionDistance: 10
   player: {fileID: 0}
 --- !u!114 &2196572669536080123
